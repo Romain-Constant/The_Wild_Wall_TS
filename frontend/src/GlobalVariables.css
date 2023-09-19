@@ -1,0 +1,18 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap");
+
+:root {
+  --fontMontserrat: "Montserrat", sans-serif;
+  --fontPoppins: "Poppins", sans-serif;
+  --fontHand: "Shadows Into Light", cursive;
+
+  --black: #111111;
+  --white: #ffffff;
+  --grey: #c9d0d3;
+  --green: #c7ebb3;
+  --champagne: #f4dfcd;
+  --pink: #ffd5f8;
+  --blue: #c5e8f1;
+  --yellow: #f8eaae;
+}

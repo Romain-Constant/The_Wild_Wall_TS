@@ -1,0 +1,48 @@
+.consoleMenuContainer {
+  width: 100%;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+  gap: 2rem;
+}
+
+.consoleButton {
+  position: relative;
+  font-size: 1.2rem;
+  background-color: transparent;
+  border: solid 2px var(--black);
+  border-radius: 2rem;
+  padding: 0.3rem 1rem;
+  cursor: pointer;
+  color: var(--black);
+  text-decoration: none;
+  box-shadow:
+    rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
+.activeButton {
+  position: relative;
+  font-size: 1.2rem;
+  border: solid 2px var(--black);
+  border-radius: 2rem;
+  padding: 0.3rem 1rem;
+  cursor: pointer;
+  color: var(--black);
+  background-color: var(--black);
+  color: var(--champagne);
+  text-decoration: none;
+  box-shadow:
+    rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
+.consoleButton:hover {
+  background-color: var(--black);
+  color: var(--champagne);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
