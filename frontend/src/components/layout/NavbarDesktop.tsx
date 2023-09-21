@@ -2,20 +2,21 @@ import {FaPowerOff, FaUserNinja} from "react-icons/fa";
 import {Link} from "react-router-dom";
 import {toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "../../api/axios";
+import {fetchData} from "../../api/api";
+import {baseUrl} from "../../api/config";
 import useAuth from "../../hooks/useAuth";
 import styles from "./NavbarDesktop.module.css";
 
 function NavbarDesktop() {
   const {auth, setAuth} = useAuth();
 
-  console.log("auth", auth);
-
   const handleLogout = async () => {
     // Delete the authentication cookie
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     try {
-      await axios.get("/logout");
+      await fetchData(`${baseUrl}/logout`, {
+        method: "GET",
+      });
 
       // Show success toast
       toast.success("Logout successful!", {
