@@ -1,0 +1,130 @@
+.registerPageContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.loginCard {
+  width: 450px;
+  height: 650px;
+  background-color: var(--white);
+  border-radius: 1.5rem;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
+
+.loginCardHeader {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-image: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.606) 0%,
+      rgba(0, 0, 0, 0.682) 100%
+    ),
+    url("../assets/WorkBanner.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: var(--white);
+  font-size: 2.3rem;
+  font-weight: 600;
+  margin-bottom: 4rem;
+}
+
+.loginCardBody {
+  width: 100%;
+  flex: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.loginInputs {
+  width: 50%;
+  height: 2.5rem;
+  border: none;
+  border-bottom: solid 1px var(--grey);
+  font-family: var(--fontPoppins);
+  font-size: 1rem;
+}
+
+.loginInputs::placeholder {
+  color: var(--grey);
+}
+
+.loginInputs:focus {
+  outline: none;
+}
+
+.loginButton {
+  cursor: pointer;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  padding: 0.8rem 3.5rem;
+  border-radius: 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--white);
+  border: none;
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.606) 0%,
+    rgba(0, 0, 0, 0.682) 100%
+  );
+  border: solid 2px transparent;
+}
+
+.loginButton:disabled {
+  color: gray;
+  cursor: default;
+}
+
+.loginButton:not(:disabled):hover {
+  color: var(--pink);
+  border: solid 2px var(--pink);
+  /* Autres styles spécifiques au hover */
+}
+
+.noAccountText,
+.signupLinkStyle {
+  font-family: var(--fontPoppins);
+  font-size: 1rem;
+  color: var(--grey);
+}
+
+.instructions {
+  font-size: 0.75rem;
+  border-radius: 0.5rem;
+  background: #000;
+  color: #fff;
+  padding: 0.25rem;
+  position: relative;
+  bottom: -10px;
+}
+
+.instructions > svg {
+  margin-right: 0.25rem;
+}
+
+.offscreen {
+  position: absolute;
+  left: -9999px;
+}
+
+.errmsg {
+  background-color: lightpink;
+  color: firebrick;
+  font-weight: bold;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+}

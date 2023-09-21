@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import User from 'types/user.type'
 import * as bcrypt from 'bcrypt'
 import * as userModel from '../models/user.model'
+import { log } from 'console'
 
 const handleResponse = (res: Response, statusCode: number, message: string) => {
   return res.status(statusCode).json({ message })
@@ -58,18 +59,19 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
   const { username, password } = req.body
 
   if (!username || !password) {
-    return res.status(400).json({ message: 'Username and password are required.' })
+    return res.status(400).json({ error: 'Username and password are required.' })
   }
 
   try {
     // Check if the user already exists in the database
     const existingUser: User | null = await userModel.findUserByUsername(username)
     if (existingUser) {
-      return res.status(409).json({ message: 'Username already exists.' })
+      return res.status(409).json({ error: 'Username already exists.' })
     }
 
     // If the user does not exist, proceed with registration
     const hashedPassword: string = await bcrypt.hash(password, 10)
+    log(hashedPassword)
     const newUser: User = { username, password: hashedPassword }
 
     const result = await userModel.insertUser(newUser)
