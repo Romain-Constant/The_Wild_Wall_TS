@@ -1,7 +1,7 @@
 export interface AuthState {
   userId?: number;
   username?: string;
-  role?: string;
+  roleCode?: string;
 }
 
 export default AuthState;

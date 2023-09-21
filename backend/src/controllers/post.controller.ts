@@ -18,7 +18,7 @@ export const getAllPosts = async (req: Request, res: Response): Promise<Response
       return handleResponse(res, 404, 'No post found')
     }
 
-    return res.status(200).json({ data: posts })
+    return res.status(200).json({ posts })
   } catch (err) {
     console.error(err)
     return handleUnexpectedError(res)
@@ -33,7 +33,7 @@ export const getAllArchivedPosts = async (req: Request, res: Response): Promise<
       return handleResponse(res, 404, 'No archived post found')
     }
 
-    return res.status(200).json({ data: posts })
+    return res.status(200).json({ posts })
   } catch (err) {
     console.error(err)
     return handleUnexpectedError(res)
@@ -48,7 +48,7 @@ export const getPostById = async (req: Request, res: Response): Promise<Response
     if (!post) {
       return handleResponse(res, 404, 'Post not found')
     }
-    return res.status(200).json({ data: post })
+    return res.status(200).json({ post })
   } catch (err) {
     console.error(err)
     return handleUnexpectedError(res)

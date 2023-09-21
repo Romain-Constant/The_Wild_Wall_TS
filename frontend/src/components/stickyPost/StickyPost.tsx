@@ -1,23 +1,14 @@
-import {Link} from "react-router-dom";
-import {FaUserNinja, FaCalendarAlt, FaArchive} from "react-icons/fa";
-import {IoIosCloseCircle} from "react-icons/io";
 import {BsFillPencilFill} from "react-icons/bs";
-import formatDate from "../../services/dateUtils";
+import {FaArchive, FaCalendarAlt, FaUserNinja} from "react-icons/fa";
+import {IoIosCloseCircle} from "react-icons/io";
+import {Link} from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import formatDate from "../../services/dateUtils";
+import Post from "../../types/post.type";
 import styles from "./StickyPost.module.css";
 
-interface PostData {
-  postId: number;
-  postText: string;
-  postDate: string;
-  statutName: string;
-  colorCode: string;
-  userID: number;
-  username: string;
-}
-
 interface StickyPostProps {
-  postData: PostData;
+  postData: Post;
   onDelete: () => void;
   onArchive: () => void;
   rotation: number;
@@ -29,9 +20,9 @@ function StickyPost({
   onArchive,
   rotation,
 }: StickyPostProps) {
-  const {username, postText, postDate, statutName} = postData;
+  const {username, postText, postDate, statutName, userId} = postData;
   const {auth} = useAuth();
-  const isUserPost = auth.userId === postData.userID;
+  const isUserPost = auth.userId === userId;
   const isAdmin = auth.role === "2013" || auth.role === "4004";
 
   const renderEditAndDeleteButtons = () => {

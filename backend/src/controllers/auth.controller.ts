@@ -30,7 +30,7 @@ export const loginUser = async (req: Request, res: Response): Promise<Response> 
           expires: new Date(Date.now() + 60 * 60 * 1000) // Expires in 1 hour
         })
 
-        return res.status(200).json({ username: user.username, roleCode, id: user.id })
+        return res.status(200).json({ username: user.username, roleCode, userId: user.id })
       } else {
         // Mot de passe incorrect
         return res.status(401).json({ error: 'Authentication failed. Invalid password.' })
