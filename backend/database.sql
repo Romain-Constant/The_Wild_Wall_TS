@@ -63,7 +63,7 @@ VALUES ('1', 'green', '#c7ebb3'),
 
 -- Insertion de l'utilisateur "Romain" avec le mot de passe "Romain" et le rôle "admin"
 INSERT INTO `ts_wild_wall`.`user` (`username`, `password`, `role_id`)
-VALUES ('Romain', 'Romain', 1);
+VALUES ('Romain', '$2b$10$tz2Kn/x6zFIxy77Aq6bQQedNcbGoJNoJO1g4RGfTiOeAfflYCwTuO', 1);
 
 -- Insertion du post "Premier post" avec la couleur bleue à la date du jour
 INSERT INTO `ts_wild_wall`.`post` (`post_text`, `post_date`, `statut_id`, `user_id`, `color_id`)

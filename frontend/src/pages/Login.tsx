@@ -1,19 +1,24 @@
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
-import useAuth from "../hooks/useAuth";
 import {fetchData} from "../api/api";
-import AuthState from "../types/auth.type";
 import {baseUrl} from "../api/config";
+import useAuth from "../hooks/useAuth";
+import AuthState from "../types/auth.type";
 import styles from "./Login.module.css";
 
 function Login() {
-  const [logUsername, setLogUsername] = useState("");
-  const [logPassword, setLogPassword] = useState("");
+  const loginRef = useRef<HTMLInputElement>(null);
+  const [logUsername, setLogUsername] = useState<string>("");
+  const [logPassword, setLogPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const {setAuth} = useAuth();
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    loginRef.current?.focus();
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,6 +69,7 @@ function Login() {
           <input
             type="text"
             id="log-username"
+            ref={loginRef}
             placeholder="Username"
             autoComplete="off"
             className={styles.loginInputs}
