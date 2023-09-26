@@ -23,7 +23,7 @@ function StickyPost({
   const {username, postText, postDate, statutName, userId} = postData;
   const {auth} = useAuth();
   const isUserPost = auth.userId === userId;
-  const isAdmin = auth.role === "2013" || auth.role === "4004";
+  const isAdmin = auth.roleCode === "2013" || auth.roleCode === "4004";
 
   const renderEditAndDeleteButtons = () => {
     if (isUserPost) {

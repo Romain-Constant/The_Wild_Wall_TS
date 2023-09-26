@@ -22,7 +22,7 @@ function MainWall() {
 
         setPostsList(response.posts);
       } catch (err) {
-        console.error(err);
+        console.error("Error:", err);
       }
     };
     fetchAllPosts();

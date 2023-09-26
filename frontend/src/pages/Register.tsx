@@ -49,8 +49,8 @@ function Register() {
     }
   }, [errorMessage]);
 
-  const handleRegister = async (e: FormEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleRegister = async (event: FormEvent<HTMLButtonElement>) => {
+    event.preventDefault();
 
     try {
       await fetchData(`${baseUrl}/users/register`, {

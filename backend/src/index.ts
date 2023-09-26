@@ -1,11 +1,12 @@
 import dotenv from 'dotenv'
 import cors from 'cors'
-
 import express from 'express'
+import cookieParser from 'cookie-parser'
 import thingRouter from './routes/thingRouter'
 import userRouter from './routes/userRouter'
 import authRouter from './routes/authRouter'
 import postRouter from './routes/postRouter'
+
 dotenv.config()
 
 const app = express()
@@ -18,6 +19,9 @@ app.use(
     optionsSuccessStatus: 200
   })
 )
+
+// Use cookie-parser before your routes
+app.use(cookieParser())
 
 app.use('/things', thingRouter)
 app.use('/users', userRouter)

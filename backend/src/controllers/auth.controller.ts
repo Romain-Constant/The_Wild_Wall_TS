@@ -14,14 +14,14 @@ export const loginUser = async (req: Request, res: Response): Promise<Response> 
       const match: boolean = await bcrypt.compare(password, user.password)
 
       if (match) {
-        const { id, role_code: roleCode } = user
+        const { userId, role_code: roleCode } = user
         const jwtPassword = process.env.JWT_PASSWORD
 
         if (!jwtPassword) {
           return res.status(500).json({ error: 'JWT secret key not defined.' })
         }
 
-        const token: string = jwt.sign({ id, roleCode }, jwtPassword, {
+        const token: string = jwt.sign({ userId, roleCode }, jwtPassword, {
           expiresIn: 300
         })
 
@@ -30,7 +30,7 @@ export const loginUser = async (req: Request, res: Response): Promise<Response> 
           expires: new Date(Date.now() + 60 * 60 * 1000) // Expires in 1 hour
         })
 
-        return res.status(200).json({ username: user.username, roleCode, userId: user.id })
+        return res.status(200).json({ username: user.username, roleCode, userId })
       } else {
         // Mot de passe incorrect
         return res.status(401).json({ error: 'Authentication failed. Invalid password.' })

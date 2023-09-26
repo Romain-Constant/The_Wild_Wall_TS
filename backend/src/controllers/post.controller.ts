@@ -1,6 +1,10 @@
 import { Request, Response } from 'express'
 import * as postModel from '../models/post.model'
+import * as jwt from 'jsonwebtoken'
+import { JwtPayload } from 'jsonwebtoken'
 import Post from 'types/post.type'
+
+require('dotenv').config()
 
 const handleResponse = (res: Response, statusCode: number, message: string) => {
   return res.status(statusCode).json({ message })
@@ -75,12 +79,29 @@ export const editPost = async (req: Request, res: Response): Promise<Response> =
   const { postId, postText, colorCode } = req.body
 
   if (!postId || !postText || !colorCode) {
-    return res.status(400).json({ message: 'Post ID, post text and color code are required.' })
+    return res.status(400).json({ message: 'Post ID, post text, and color code are required.' })
   }
 
   try {
+    const jwtPassword = process.env.JWT_PASSWORD
+    const token = req.cookies.token
+
+    if (!token) {
+      return res.status(401).json({ message: 'Unauthorized' })
+    }
+
+    if (!jwtPassword) {
+      throw new Error('JWT_PASSWORD is not defined in your .env file')
+    }
+
+    const decodedToken = jwt.verify(token, jwtPassword) as JwtPayload
+
+    if (decodedToken.userId !== postId) {
+      return res.status(403).json({ message: 'Forbidden' })
+    }
+
     const result = await postModel.editPost(postId, postText, colorCode)
-    return res.status(200).json({ success: `Post modified!`, result })
+    return res.status(200).json({ success: 'Post modified!', result })
   } catch (err) {
     console.error(err)
     return handleUnexpectedError(res)
