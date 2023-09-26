@@ -23,7 +23,7 @@ export const findAllUsers = async (): Promise<User[]> => {
   const rows = await executeQuery<RowDataPacket[]>(queryString)
 
   const users: User[] = rows.map((row) => ({
-    id: row.id,
+    userId: row.id,
     username: row.username,
     password: row.password,
     role: row.role_name,
@@ -43,7 +43,7 @@ export const findUserById = async (userId: number): Promise<User | null> => {
   }
   const row = rows[0]
   const user: User = {
-    id: row.id,
+    userId: row.id,
     username: row.username,
     password: row.password,
     role: row.role_name,
@@ -63,7 +63,7 @@ export const findUserByUsername = async (username: string): Promise<User | null>
   }
   const row = rows[0]
   const user: User = {
-    id: row.id,
+    userId: row.id,
     username: row.username,
     password: row.password,
     role: row.role_name,

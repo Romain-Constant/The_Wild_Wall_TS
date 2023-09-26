@@ -38,7 +38,7 @@ export const findAllPosts = async (): Promise<Post[]> => {
 }
 
 export const findAllArchivedPosts = async (): Promise<Post[]> => {
-  const queryString = `SELECT p.id AS postId, p.post_text AS postText, p.post_date AS postDate, s.statut_name AS statutName, u.id AS userID, u.username, c.color_code AS colorCode
+  const queryString = `SELECT p.id AS postId, p.post_text AS postText, p.post_date AS postDate, s.statut_name AS statutName, u.id AS userId, u.username, c.color_code AS colorCode
       FROM post AS p
       JOIN ts_wild_wall.statut AS s ON p.statut_id = s.id
       JOIN ts_wild_wall.user AS u ON p.user_id = u.id
@@ -61,7 +61,7 @@ export const findAllArchivedPosts = async (): Promise<Post[]> => {
 }
 
 export const findPostById = async (postId: number): Promise<Post | null> => {
-  const queryString = `SELECT p.id AS postId, p.post_text AS postText, p.post_date AS postDate, s.statut_name AS statutName, u.id AS userID, u.username, c.color_code AS colorCode
+  const queryString = `SELECT p.id AS postId, p.post_text AS postText, p.post_date AS postDate, s.statut_name AS statutName, u.id AS userId, u.username, c.color_code AS colorCode
     FROM post AS p
     JOIN ts_wild_wall.statut AS s ON p.statut_id = s.id
     JOIN ts_wild_wall.user AS u ON p.user_id = u.id

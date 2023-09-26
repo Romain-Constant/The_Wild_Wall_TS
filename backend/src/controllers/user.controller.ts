@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 import User from 'types/user.type'
 import * as bcrypt from 'bcrypt'
 import * as userModel from '../models/user.model'
-import { log } from 'console'
 
 const handleResponse = (res: Response, statusCode: number, message: string) => {
   return res.status(statusCode).json({ message })
@@ -71,7 +70,7 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
 
     // If the user does not exist, proceed with registration
     const hashedPassword: string = await bcrypt.hash(password, 10)
-    log(hashedPassword)
+
     const newUser: User = { username, password: hashedPassword }
 
     const result = await userModel.insertUser(newUser)

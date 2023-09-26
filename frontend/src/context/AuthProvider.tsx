@@ -32,14 +32,14 @@ export function AuthProvider({children}: AuthProps) {
     localStorage.setItem("auth", JSON.stringify(auth));
   }, [auth]);
 
-  // Clear the auth state from local storage after 30 minutes
+  // Clear the auth state from local storage after 60 minutes
   useEffect(() => {
     const timeoutId = setTimeout(
       () => {
         localStorage.removeItem("auth");
       },
-      30 * 60 * 1000,
-    ); // 30 minutes in milliseconds
+      60 * 60 * 1000,
+    ); // 60 minutes in milliseconds
 
     return () => clearTimeout(timeoutId);
   }, []);

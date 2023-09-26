@@ -1,0 +1,194 @@
+.writePostContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.backIconContainer {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 150px;
+  background: #f4dfcd;
+  box-shadow:
+    5px -5px 10px #cfbeae,
+    -5px 5px 10px #ffffec;
+  position: absolute;
+  top: 5%;
+  right: 2%;
+}
+
+.linkContainer {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.backIcon {
+  font-size: 2.5rem;
+  margin-left: 2px;
+  margin-bottom: 1px;
+}
+
+.stickyPostContainer {
+  width: 300px;
+  height: 350px;
+  box-shadow: 5px 5px 7px rgba(33, 33, 33, 0.7);
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stickyHeader {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--fontPoppins);
+  margin-bottom: 0.5rem;
+}
+
+.separator {
+  width: 75%;
+  height: 1px;
+  background-color: var(--black);
+  margin-bottom: 0.5rem;
+}
+
+.stickyUsername,
+.stickyDate {
+  font-size: 1.2rem;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stickyIcons {
+  font-size: 1rem;
+  margin-top: -2px;
+}
+
+.stickyTextContainer {
+  width: 100%;
+  flex: 1;
+  overflow-x: hidden;
+}
+
+.stickyInput {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background-color: inherit;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--fontHand);
+  font-size: 1.8rem;
+  resize: none;
+}
+
+.stickyInput:focus {
+  outline: none;
+}
+
+.stickyText {
+  font-family: var(--fontHand);
+  font-size: 1.7rem;
+}
+
+.stickyFooter {
+  width: 100%;
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.footerLeft {
+  flex: 1;
+}
+
+.colorContainer label input {
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+  border: none;
+}
+
+/* WritePost.module.css */
+.colorContainer {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.colorContainer label {
+  margin-right: 10px;
+  position: relative;
+}
+
+.colorContainer label input {
+  position: absolute;
+  left: -9999px;
+}
+
+.radioColor {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  cursor: pointer;
+}
+
+.colorContainer label input:checked + .radioColor {
+  border: 2px solid #000; /* Change the border color when the radio button is checked */
+}
+
+.colorContainer label input:focus + .radioColor {
+  box-shadow: 0 0 5px #000; /* Optional: Add a box-shadow when the radio button is focused */
+}
+
+.stickyButtonsContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.3rem;
+}
+
+.iconCircleContainer {
+  width: 25px;
+  height: 25px;
+  border-radius: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sendButton {
+  border: none;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.penIcon {
+  font-size: 2rem;
+  margin-right: 2px;
+  margin-top: 1px;
+}
+
+.crossIcon {
+  font-size: 1.3rem;
+}
