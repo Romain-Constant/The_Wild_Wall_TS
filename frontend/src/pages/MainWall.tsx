@@ -13,18 +13,19 @@ function MainWall() {
   const {auth} = useAuth();
   const [rotations, setRotations] = useState<number[]>([]);
 
-  useEffect(() => {
-    const fetchAllPosts = async () => {
-      try {
-        const response = await fetchData<{posts: Post[]}>(`${baseUrl}/posts`, {
-          method: "GET",
-        });
+  const fetchAllPosts = async () => {
+    try {
+      const response = await fetchData<{posts: Post[]}>(`${baseUrl}/posts`, {
+        method: "GET",
+      });
 
-        setPostsList(response.posts);
-      } catch (err) {
-        console.error("Error:", err);
-      }
-    };
+      setPostsList(response.posts);
+    } catch (err) {
+      console.error("Error:", err);
+    }
+  };
+
+  useEffect(() => {
     fetchAllPosts();
   }, []);
 
@@ -46,17 +47,19 @@ function MainWall() {
 
   const handlePostArchive = async (postId: number) => {
     try {
+      // Archive le post localement en filtrant la liste actuelle
+      setPostsList(prevPosts =>
+        prevPosts.filter(post => post.postId !== postId),
+      );
+
+      // Ensuite, envoyez la demande au serveur pour archiver le post
       const response = (await fetchData(`${baseUrl}/posts/archive/${postId}`, {
         method: "PUT",
       })) as Response;
 
-      // After successful archive, update the postsList state to refresh MainWall
-      if (response.status === 200) {
-        // Fetch updated posts list from the server after archiving
-        const updatedPostsResponse = await fetchData<{posts: Post[]}>(
-          `${baseUrl}/posts`,
-        );
-        setPostsList(updatedPostsResponse.posts);
+      if (response.status !== 200) {
+        // Si la demande au serveur échoue, annulez la mise à jour locale
+        fetchAllPosts();
       }
     } catch (err) {
       console.error("Error:", err);

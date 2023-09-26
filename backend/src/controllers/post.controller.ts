@@ -112,8 +112,35 @@ export const archivePost = async (req: Request, res: Response): Promise<Response
   const postId: number = parseInt(req.params.id, 10)
 
   try {
-    const result = await postModel.archivePost(postId)
-    return res.status(200).json({ success: `Post archived!`, result })
+    const jwtPassword = process.env.JWT_PASSWORD
+    const token = req.cookies.token
+
+    if (!token) {
+      return res.status(401).json({ message: 'Unauthorized' })
+    }
+
+    if (!jwtPassword) {
+      throw new Error('JWT_PASSWORD is not defined in your .env file')
+    }
+
+    const decodedToken = jwt.verify(token, jwtPassword) as JwtPayload
+
+    // Obtenez le post en utilisant postId
+    const post: Post | null = await postModel.findPostById(postId)
+
+    if (!post) {
+      return handleResponse(res, 404, 'Post not found')
+    }
+
+    // Vérifiez si le roleCode est "4004" ou "5067" ou si l'userId correspond au post
+    if (decodedToken.roleCode === '4004' || decodedToken.roleCode === '5067' || decodedToken.userId === post.userId) {
+      // L'utilisateur a les autorisations nécessaires, vous pouvez maintenant archiver le post
+      const result = await postModel.archivePost(postId)
+      return res.status(200).json({ success: `Post archived!`, result })
+    } else {
+      // L'utilisateur n'a pas les autorisations nécessaires
+      return res.status(403).json({ message: 'Forbidden' })
+    }
   } catch (err) {
     console.error(err)
     return handleUnexpectedError(res)
