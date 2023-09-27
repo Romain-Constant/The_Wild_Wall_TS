@@ -33,9 +33,12 @@ function ArchivedPosts() {
 
   const handlePostDelete = async (postId: number) => {
     try {
-      const response = await fetchData(`${baseUrl}/posts/${postId}`, {
-        method: "DELETE",
-      });
+      const response: ApiResponse<void> = await fetchData(
+        `${baseUrl}/posts/${postId}`,
+        {
+          method: "DELETE",
+        },
+      );
 
       // After successful deletion, update the postsList state to refresh MainWall
       if (response.status === 200) {
