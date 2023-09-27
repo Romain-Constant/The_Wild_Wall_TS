@@ -1,27 +1,26 @@
 import {useEffect, useState} from "react";
 import {BsPlusCircleFill} from "react-icons/bs";
 import {Link} from "react-router-dom";
-import useAuth from "../hooks/useAuth";
-import styles from "./MainWall.module.css";
-import Post from "../types/post.type";
-import {fetchData, ApiResponse} from "../api/api";
+import {ApiResponse, fetchData} from "../api/api";
 import {baseUrl} from "../api/config";
 import StickyPost from "../components/stickyPost/StickyPost";
+import useAuth from "../hooks/useAuth";
+import Post from "../types/post.type";
+import styles from "./ArchivedPosts.module.css";
 
-function MainWall() {
-  const [postsList, setPostsList] = useState<Post[]>([]);
+function ArchivedPosts() {
   const {auth} = useAuth();
+  const [postsList, setPostsList] = useState<Post[]>([]);
   const [rotations, setRotations] = useState<number[]>([]);
 
-  const fetchAllPosts = async () => {
+  const fetchArchivedPosts = async () => {
     try {
       const response: ApiResponse<{posts: Post[]}> = await fetchData(
-        `${baseUrl}/posts`,
+        `${baseUrl}/posts/archived`,
         {
           method: "GET",
         },
       );
-
       setPostsList(response.data.posts);
     } catch (err) {
       console.error("Error:", err);
@@ -29,47 +28,23 @@ function MainWall() {
   };
 
   useEffect(() => {
-    fetchAllPosts();
+    fetchArchivedPosts();
   }, []);
 
   const handlePostDelete = async (postId: number) => {
     try {
-      const response: ApiResponse<void> = await fetchData(
-        `${baseUrl}/posts/${postId}`,
-        {
-          method: "DELETE",
-        },
-      );
+      const response = await fetchData(`${baseUrl}/posts/${postId}`, {
+        method: "DELETE",
+      });
 
+      // After successful deletion, update the postsList state to refresh MainWall
       if (response.status === 200) {
         setPostsList(prevPosts =>
           prevPosts.filter(post => post.postId !== postId),
         );
       }
-    } catch (err) {
-      console.error("Error:", err);
-    }
-  };
-
-  const handlePostArchive = async (postId: number) => {
-    try {
-      // Envoyez la demande au serveur pour archiver le post
-      const response: ApiResponse<void> = await fetchData(
-        `${baseUrl}/posts/archive/${postId}`,
-        {
-          method: "PUT",
-        },
-      );
-
-      if (response.status === 200) {
-        // Si l'archivage réussit sur le serveur, mettez à jour localement la liste des posts
-        setPostsList(prevPosts =>
-          prevPosts.filter(post => post.postId !== postId),
-        );
-      }
-    } catch (err) {
-      console.error("Error:", err);
-      // Gérez l'erreur ici, par exemple, en affichant un message d'erreur à l'utilisateur
+    } catch (error) {
+      console.error("Error:", error);
     }
   };
 
@@ -96,9 +71,8 @@ function MainWall() {
           key={post.postId}
           postData={post}
           onDelete={() => handlePostDelete(post.postId)}
-          onArchive={() => handlePostArchive(post.postId)}
           rotation={rotations[idx]}
-          isArchivedPost={false}
+          isArchivedPost={true}
         />
       ))}
       {Object.keys(auth).length !== 0 ? (
@@ -118,4 +92,4 @@ function MainWall() {
   );
 }
 
-export default MainWall;
+export default ArchivedPosts;

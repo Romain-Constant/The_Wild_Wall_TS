@@ -1,12 +1,13 @@
 import {Route, Routes} from "react-router-dom";
 import Layout from "./components/layout/Layout";
+import RequireAuth from "./components/requireAuth/RequireAuth";
+import ArchivedPosts from "./pages/ArchivedPosts";
+import EditPost from "./pages/EditPost";
 import Login from "./pages/Login";
 import MainWall from "./pages/MainWall";
 import Register from "./pages/Register";
 import Unauthorized from "./pages/Unauthorized";
-import RequireAuth from "./components/requireAuth/RequireAuth";
 import WritePost from "./pages/WritePost";
-import EditPost from "./pages/EditPost";
 
 const ROLES = {
   admin: "2013",
@@ -19,6 +20,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route path="mainwall" element={<MainWall />} />
+        <Route path="archives" element={<ArchivedPosts />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="unauthorized" element={<Unauthorized />} />
