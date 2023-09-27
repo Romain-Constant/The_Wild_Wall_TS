@@ -5,6 +5,7 @@ import useAuth from "../hooks/useAuth";
 import styles from "./MainWall.module.css";
 import Post from "../types/post.type";
 import {fetchData, ApiResponse} from "../api/api";
+import ConfirmationModal from "../components/confirmationModal/ConfirmationModal";
 import {baseUrl} from "../api/config";
 import StickyPost from "../components/stickyPost/StickyPost";
 
@@ -12,6 +13,7 @@ function MainWall() {
   const [postsList, setPostsList] = useState<Post[]>([]);
   const {auth} = useAuth();
   const [rotations, setRotations] = useState<number[]>([]);
+  const [deletePostId, setDeletePostId] = useState<number | null>(null);
 
   const fetchAllPosts = async () => {
     try {
@@ -48,6 +50,9 @@ function MainWall() {
       }
     } catch (err) {
       console.error("Error:", err);
+    } finally {
+      // Fermez la modal après la suppression
+      setDeletePostId(null);
     }
   };
 
@@ -78,10 +83,10 @@ function MainWall() {
     const generateRandomRotations = () => {
       const minRotation = -5;
       const maxRotation = 5;
-      const randomRotations = postsList.map(
-        () =>
-          Math.floor(Math.random() * (maxRotation - minRotation + 1)) +
-          minRotation,
+      const randomRotations = postsList.map(() =>
+        Math.floor(
+          Math.random() * (maxRotation - minRotation + 1) + minRotation,
+        ),
       );
       setRotations(randomRotations);
     };
@@ -89,13 +94,18 @@ function MainWall() {
     generateRandomRotations();
   }, [postsList]);
 
+  // Fonction pour ouvrir la modal de confirmation de suppression
+  const openDeleteModal = (postId: number) => {
+    setDeletePostId(postId);
+  };
+
   return (
     <section className={styles.mainWallContainer}>
       {postsList.map((post, idx) => (
         <StickyPost
           key={post.postId}
           postData={post}
-          onDelete={() => handlePostDelete(post.postId)}
+          onDelete={() => openDeleteModal(post.postId)} // Ouvrir la modal de confirmation
           onArchive={() => handlePostArchive(post.postId)}
           rotation={rotations[idx]}
           isArchivedPost={false}
@@ -114,6 +124,18 @@ function MainWall() {
           </div>
         </Link>
       )}
+
+      {/* Modal de confirmation de suppression */}
+      <ConfirmationModal
+        isOpen={deletePostId !== null}
+        onClose={() => setDeletePostId(null)}
+        onConfirm={() => {
+          if (deletePostId !== null) {
+            handlePostDelete(deletePostId); // Vérification de nullité avant d'appeler handlePostDelete
+          }
+        }}
+        message="Êtes-vous sûr de vouloir supprimer ce post ?"
+      />
     </section>
   );
 }

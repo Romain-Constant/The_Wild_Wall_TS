@@ -1,6 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {fetchData, ApiResponse} from "../api/api";
+import {toast} from "react-toastify";
 import {baseUrl} from "../api/config";
 import useAuth from "../hooks/useAuth";
 import AuthState from "../types/auth.type";
@@ -44,10 +45,10 @@ function Login() {
       setLogPassword("");
 
       // Show success toast
-      /* toast.success("Login successful!", {
+      toast.success("Login successful!", {
         className: styles.toastifySuccess,
         autoClose: 2000,
-      }); */
+      });
 
       navigate("/mainwall");
     } catch (err) {
