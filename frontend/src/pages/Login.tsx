@@ -1,6 +1,6 @@
 import {useEffect, useRef, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
-import {fetchData} from "../api/api";
+import {fetchData, ApiResponse} from "../api/api";
 import {baseUrl} from "../api/config";
 import useAuth from "../hooks/useAuth";
 import AuthState from "../types/auth.type";
@@ -24,18 +24,21 @@ function Login() {
     e.preventDefault();
 
     try {
-      const response = await fetchData<AuthState>(`${baseUrl}/auth/login`, {
-        method: "POST",
-        body: JSON.stringify({
-          username: logUsername,
-          password: logPassword,
-        }),
-      });
+      const response: ApiResponse<AuthState> = await fetchData(
+        `${baseUrl}/auth/login`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            username: logUsername,
+            password: logPassword,
+          }),
+        },
+      );
 
       setAuth({
-        userId: response.userId,
-        username: response.username,
-        roleCode: response.roleCode,
+        userId: response.data.userId,
+        username: response.data.username,
+        roleCode: response.data.roleCode,
       });
       setLogUsername("");
       setLogPassword("");

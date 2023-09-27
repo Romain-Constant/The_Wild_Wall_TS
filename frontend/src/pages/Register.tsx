@@ -1,8 +1,8 @@
 import {faInfoCircle} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {FormEvent, useEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
-import {fetchData} from "../api/api";
+import {fetchData, ApiResponse} from "../api/api";
 import {baseUrl} from "../api/config";
 import styles from "./Register.module.css";
 
@@ -49,26 +49,37 @@ function Register() {
     }
   }, [errorMessage]);
 
-  const handleRegister = async (event: FormEvent<HTMLButtonElement>) => {
+  const handleRegister = async (event: React.FormEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
     try {
-      await fetchData(`${baseUrl}/users/register`, {
-        method: "POST",
-        body: JSON.stringify({
-          username: regUsername,
-          password: regPassword,
-        }),
-      });
-      navigate("/login");
+      const response: ApiResponse<void> = await fetchData<void>(
+        `${baseUrl}/users/register`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            username: regUsername,
+            password: regPassword,
+          }),
+        },
+      );
+
+      if (response.status === 201) {
+        // Registration successful, navigate to the login page
+        navigate("/login");
+      } else {
+        // Handle other status codes if needed
+        setErrorMessage("Registration failed. Please check your inputs.");
+      }
     } catch (err) {
       if (err instanceof Error) {
         setErrorMessage(err.message);
       } else {
         setErrorMessage("An unknown error occurred.");
       }
-      errRef.current?.focus();
     }
+
+    // Reset input fields
     setRegUsername("");
     setRegPassword("");
     setMatchPwd("");

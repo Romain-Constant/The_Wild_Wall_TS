@@ -4,7 +4,7 @@ import {FaUserNinja, FaCalendarAlt} from "react-icons/fa";
 import {IoArrowBackCircleSharp} from "react-icons/io5";
 import {BsFillSendFill} from "react-icons/bs";
 import formatDate from "../services/dateUtils";
-import {fetchData} from "../api/api";
+import {fetchData, ApiResponse} from "../api/api";
 import {baseUrl} from "../api/config";
 import styles from "./EditPost.module.css";
 import useAuth from "../hooks/useAuth";
@@ -21,15 +21,16 @@ function EditPost() {
   useEffect(() => {
     const fetchPostById = async () => {
       try {
-        const response = await fetchData<{post: Post}>(
+        const response: ApiResponse<{post: Post}> = await fetchData(
           `${baseUrl}/posts/${postId}`,
           {
             method: "GET",
           },
         );
-        setCurrentPost(response.post);
-        setPostText(response.post.postText);
-        setPostColor(response.post.colorCode);
+
+        setCurrentPost(response.data.post);
+        setPostText(response.data.post.postText);
+        setPostColor(response.data.post.colorCode);
       } catch (err) {
         console.error("Error:", err);
       }

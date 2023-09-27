@@ -4,8 +4,6 @@ import * as jwt from 'jsonwebtoken'
 import { JwtPayload } from 'jsonwebtoken'
 import Post from 'types/post.type'
 
-require('dotenv').config()
-
 const handleResponse = (res: Response, statusCode: number, message: string) => {
   return res.status(statusCode).json({ message })
 }
@@ -79,7 +77,7 @@ export const editPost = async (req: Request, res: Response): Promise<Response> =
   const { postId, postText, colorCode } = req.body
 
   if (!postId || !postText || !colorCode) {
-    return res.status(400).json({ message: 'Post ID, post text, and color code are required.' })
+    return handleResponse(res, 400, 'Post ID, post text, and color code are required.')
   }
 
   try {
@@ -87,7 +85,7 @@ export const editPost = async (req: Request, res: Response): Promise<Response> =
     const token = req.cookies.token
 
     if (!token) {
-      return res.status(401).json({ message: 'Unauthorized' })
+      return handleResponse(res, 401, 'Unauthorized')
     }
 
     if (!jwtPassword) {
@@ -96,8 +94,15 @@ export const editPost = async (req: Request, res: Response): Promise<Response> =
 
     const decodedToken = jwt.verify(token, jwtPassword) as JwtPayload
 
-    if (decodedToken.userId !== postId) {
-      return res.status(403).json({ message: 'Forbidden' })
+    // Obtenez le post en utilisant postId
+    const post: Post | null = await postModel.findPostById(postId)
+
+    if (!post) {
+      return handleResponse(res, 404, 'Post not found')
+    }
+
+    if (decodedToken.userId !== post.userId) {
+      return handleResponse(res, 403, 'Forbidden')
     }
 
     const result = await postModel.editPost(postId, postText, colorCode)
@@ -116,7 +121,7 @@ export const archivePost = async (req: Request, res: Response): Promise<Response
     const token = req.cookies.token
 
     if (!token) {
-      return res.status(401).json({ message: 'Unauthorized' })
+      return handleResponse(res, 401, 'Unauthorized')
     }
 
     if (!jwtPassword) {
@@ -133,13 +138,13 @@ export const archivePost = async (req: Request, res: Response): Promise<Response
     }
 
     // Vérifiez si le roleCode est "4004" ou "5067" ou si l'userId correspond au post
-    if (decodedToken.roleCode === '4004' || decodedToken.roleCode === '5067' || decodedToken.userId === post.userId) {
+    if (decodedToken.roleCode === '4004' || decodedToken.roleCode === '2013' || decodedToken.userId === post.userId) {
       // L'utilisateur a les autorisations nécessaires, vous pouvez maintenant archiver le post
       const result = await postModel.archivePost(postId)
       return res.status(200).json({ success: `Post archived!`, result })
     } else {
       // L'utilisateur n'a pas les autorisations nécessaires
-      return res.status(403).json({ message: 'Forbidden' })
+      return handleResponse(res, 403, 'Forbidden')
     }
   } catch (err) {
     console.error(err)
