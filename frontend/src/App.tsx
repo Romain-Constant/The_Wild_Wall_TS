@@ -8,6 +8,7 @@ import MainWall from "./pages/MainWall";
 import Register from "./pages/Register";
 import Unauthorized from "./pages/Unauthorized";
 import WritePost from "./pages/WritePost";
+import Admin from "./pages/Admin";
 
 const ROLES = {
   admin: "2013",
@@ -33,6 +34,10 @@ function App() {
           }>
           <Route path="writepost" element={<WritePost />} />
           <Route path="editpost/:postId" element={<EditPost />} />
+        </Route>
+
+        <Route element={<RequireAuth allowedRoles={[ROLES.admin]} />}>
+          <Route path="admin" element={<Admin />} />
         </Route>
       </Route>
     </Routes>

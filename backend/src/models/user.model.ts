@@ -29,6 +29,7 @@ export const findAllUsers = async (): Promise<User[]> => {
     role: row.role_name,
     role_code: row.role_code
   }))
+
   return users
 }
 
