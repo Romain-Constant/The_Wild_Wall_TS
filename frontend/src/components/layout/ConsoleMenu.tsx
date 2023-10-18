@@ -22,7 +22,7 @@ function ConsoleMenu() {
         Archives wall
       </NavLink>
 
-      {auth.role === "2013" && (
+      {auth.roleCode === "2013" && (
         <NavLink
           to="/admin"
           className={({isActive}) =>

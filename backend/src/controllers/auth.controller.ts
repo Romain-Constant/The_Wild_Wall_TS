@@ -22,7 +22,7 @@ export const loginUser = async (req: Request, res: Response): Promise<Response> 
         }
 
         const token: string = jwt.sign({ userId, roleCode }, jwtPassword, {
-          expiresIn: 300
+          expiresIn: 1800
         })
 
         res.cookie('token', token, {

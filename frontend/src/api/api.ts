@@ -18,6 +18,7 @@ export async function fetchData<T>(
 
   if (!response.ok) {
     const errorResponse = await response.text();
+
     const errorMessage = JSON.parse(errorResponse).error;
 
     throw new Error(errorMessage);

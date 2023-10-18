@@ -1,0 +1,59 @@
+.adminPageContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 5rem;
+}
+
+.wilderListContainer {
+  background-color: var(--white);
+  border-radius: 15px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.wilderListContainer table {
+  border-collapse: collapse;
+}
+
+.wilderListContainer tr {
+  border-bottom: solid 1px var(--grey);
+  border-collapse: collapse;
+}
+
+.wilderListContainer th {
+  padding: 1rem 3rem;
+  text-align: center;
+}
+
+.wilderListContainer td {
+  border-bottom: solid 1px var(--grey);
+  padding: 1rem 1rem;
+  text-align: center;
+}
+
+.wilderListContainer select {
+  border: none;
+  font-family: var(--fontPoppins);
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+.wilderListContainer select:focus {
+  outline: none;
+}
+
+.deleteIcon {
+  cursor: pointer;
+  color: var(--grey);
+}
+
+.deleteIcon:hover {
+  color: var(--black);
+}
+
+.toastifySuccess {
+  background-color: black;
+  color: white;
+}
