@@ -1,12 +1,18 @@
 .mainWallContainer {
   width: 100%;
-
-  padding: 2rem;
+  padding: 2rem 1rem;
   display: flex;
+  gap: 2rem;
+  overflow-y: auto;
+}
+
+.postContainer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 2rem;
-  position: relative;
-  overflow-y: auto;
 }
 
 .addPostIconContainer {
@@ -21,9 +27,6 @@
   box-shadow:
     5px -5px 10px #cfbeae,
     -5px 5px 10px #ffffec;
-  position: absolute;
-  top: 2%;
-  right: 1%;
 }
 
 .addPostIcon {

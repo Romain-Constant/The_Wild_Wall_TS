@@ -1,13 +1,13 @@
-import {FaPowerOff, FaUserNinja} from "react-icons/fa";
+import {FaSignOutAlt, FaUserNinja} from "react-icons/fa";
 import {Link} from "react-router-dom";
 import {toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {fetchData} from "../../api/api";
 import {baseUrl} from "../../api/config";
 import useAuth from "../../hooks/useAuth";
-import styles from "./NavbarDesktop.module.css";
+import styles from "./Header.module.css";
 
-function NavbarDesktop() {
+function Header() {
   const {auth, setAuth} = useAuth();
 
   const handleLogout = async () => {
@@ -48,7 +48,7 @@ function NavbarDesktop() {
             <FaUserNinja className={styles.loggedUserIcon} />
             {auth.username}
             {/* ({getRoleText(auth.role)}) */}
-            <FaPowerOff
+            <FaSignOutAlt
               type="button"
               className={styles.logoutUserIcon}
               onClick={handleLogout}
@@ -64,4 +64,4 @@ function NavbarDesktop() {
   );
 }
 
-export default NavbarDesktop;
+export default Header;

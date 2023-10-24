@@ -2,6 +2,7 @@ import {faInfoCircle} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useEffect, useRef, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
+import {toast} from "react-toastify";
 import {fetchData, ApiResponse} from "../api/api";
 import {baseUrl} from "../api/config";
 import styles from "./Register.module.css";
@@ -49,7 +50,7 @@ function Register() {
     }
   }, [errorMessage]);
 
-  const handleRegister = async (event: React.FormEvent<HTMLButtonElement>) => {
+  const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     try {
@@ -65,6 +66,12 @@ function Register() {
       );
 
       if (response.status === 201) {
+        // Show success toast
+        toast.success("Register successful!", {
+          className: styles.toastifySuccess,
+          autoClose: 2000,
+        });
+
         // Registration successful, navigate to the login page
         navigate("/login");
       } else {
@@ -96,87 +103,90 @@ function Register() {
       <div className={styles.loginCard}>
         <div className={styles.loginCardHeader}>Register</div>
         <div className={styles.loginCardBody}>
-          <input
-            type="text"
-            id="reg-username"
-            ref={userRef}
-            placeholder="Username"
-            autoComplete="off"
-            className={styles.loginInputs}
-            value={regUsername}
-            onChange={e => setRegUsername(e.target.value)}
-            onFocus={() => setUserFocus(true)}
-            onBlur={() => setUserFocus(false)}
-          />
-          <p
-            id="uidnote"
-            className={
-              userFocus && regUsername && !validName
-                ? styles.instructions
-                : styles.offscreen
-            }>
-            <FontAwesomeIcon icon={faInfoCircle} />
-            4 to 24 characters.
-            <br />
-            Must begin with a letter.
-            <br />
-            Letters, numbers, underscores, hyphens allowed.
-          </p>
-          <input
-            type="password"
-            id="reg-password"
-            placeholder="Password"
-            autoComplete="off"
-            className={styles.loginInputs}
-            value={regPassword}
-            onChange={e => setRegPassword(e.target.value)}
-            onFocus={() => setPwdFocus(true)}
-            onBlur={() => setPwdFocus(false)}
-          />
-          <p
-            id="pwdnote"
-            className={
-              pwdFocus && !validPwd ? styles.instructions : styles.offscreen
-            }>
-            <FontAwesomeIcon icon={faInfoCircle} />
-            8 to 24 characters.
-            <br />
-            Must include uppercase and lowercase letters, a number and a special
-            character.
-            <br />
-            Allowed special characters:{" "}
-            <span aria-label="exclamation mark">!</span>{" "}
-            <span aria-label="at symbol">@</span>{" "}
-            <span aria-label="hashtag">#</span>{" "}
-            <span aria-label="dollar sign">$</span>{" "}
-            <span aria-label="percent">%</span>
-          </p>
-          <input
-            type="password"
-            id="confirm-password"
-            placeholder="Confirm password"
-            autoComplete="off"
-            className={styles.loginInputs}
-            value={matchPwd}
-            onChange={e => setMatchPwd(e.target.value)}
-            onFocus={() => setMatchFocus(true)}
-            onBlur={() => setMatchFocus(false)}
-          />
-          <p
-            id="confirmnote"
-            className={
-              matchFocus && !validMatch ? styles.instructions : styles.offscreen
-            }>
-            <FontAwesomeIcon icon={faInfoCircle} />
-            Must match the first password input field.
-          </p>
-          <button
-            type="button"
-            className={styles.loginButton}
-            onClick={handleRegister}
-            disabled={!!(!validName || !validPwd || !validMatch)}>
-            Register me !
-          </button>
+          <form className={styles.formContainer} onSubmit={handleRegister}>
+            <input
+              type="text"
+              id="reg-username"
+              ref={userRef}
+              placeholder="Username"
+              autoComplete="off"
+              className={styles.loginInputs}
+              value={regUsername}
+              onChange={e => setRegUsername(e.target.value)}
+              onFocus={() => setUserFocus(true)}
+              onBlur={() => setUserFocus(false)}
+            />
+            <p
+              id="uidnote"
+              className={
+                userFocus && regUsername && !validName
+                  ? styles.instructions
+                  : styles.offscreen
+              }>
+              <FontAwesomeIcon icon={faInfoCircle} />
+              4 to 24 characters.
+              <br />
+              Must begin with a letter.
+              <br />
+              Letters, numbers, underscores, hyphens allowed.
+            </p>
+            <input
+              type="password"
+              id="reg-password"
+              placeholder="Password"
+              autoComplete="off"
+              className={styles.loginInputs}
+              value={regPassword}
+              onChange={e => setRegPassword(e.target.value)}
+              onFocus={() => setPwdFocus(true)}
+              onBlur={() => setPwdFocus(false)}
+            />
+            <p
+              id="pwdnote"
+              className={
+                pwdFocus && !validPwd ? styles.instructions : styles.offscreen
+              }>
+              <FontAwesomeIcon icon={faInfoCircle} />
+              8 to 24 characters.
+              <br />
+              Must include uppercase and lowercase letters, a number and a
+              special character.
+              <br />
+              Allowed special characters:{" "}
+              <span aria-label="exclamation mark">!</span>{" "}
+              <span aria-label="at symbol">@</span>{" "}
+              <span aria-label="hashtag">#</span>{" "}
+              <span aria-label="dollar sign">$</span>{" "}
+              <span aria-label="percent">%</span>
+            </p>
+            <input
+              type="password"
+              id="confirm-password"
+              placeholder="Confirm password"
+              autoComplete="off"
+              className={styles.loginInputs}
+              value={matchPwd}
+              onChange={e => setMatchPwd(e.target.value)}
+              onFocus={() => setMatchFocus(true)}
+              onBlur={() => setMatchFocus(false)}
+            />
+            <p
+              id="confirmnote"
+              className={
+                matchFocus && !validMatch
+                  ? styles.instructions
+                  : styles.offscreen
+              }>
+              <FontAwesomeIcon icon={faInfoCircle} />
+              Must match the first password input field.
+            </p>
+            <button
+              type="submit"
+              className={styles.loginButton}
+              disabled={!!(!validName || !validPwd || !validMatch)}>
+              Register me !
+            </button>
+          </form>
           <p className={styles.noAccountText}>
             Already have an account ?{" "}
             <Link to="/login" className={styles.signupLinkStyle}>

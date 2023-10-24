@@ -1,11 +1,11 @@
 import {useEffect, useState} from "react";
 import {RxCross2} from "react-icons/rx";
-import {toast} from "react-toastify";
-import ConfirmationModal from "../components/confirmationModal/ConfirmationModal"; // Importez ConfirmationModal
 import {useNavigate} from "react-router-dom";
+import {toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {fetchData, ApiResponse} from "../api/api";
+import {ApiResponse, fetchData} from "../api/api";
 import {baseUrl} from "../api/config";
+import ConfirmationModal from "../components/confirmationModal/ConfirmationModal";
 import useAuth from "../hooks/useAuth";
 import User from "../types/user.type";
 
@@ -45,7 +45,7 @@ const Admin = () => {
 
         setWilderList(response.data);
       } catch (err) {
-        console.error("Error:", err);
+        console.error(err);
         if ((err as Error).message === "Token expired.") {
           handleLogout();
         }
@@ -68,7 +68,10 @@ const Admin = () => {
         body: JSON.stringify({role: {name: newRole}}),
       });
     } catch (err) {
-      console.error(err);
+      console.error("Error:", err);
+      if ((err as Error).message === "Token expired.") {
+        handleLogout();
+      }
     }
   };
 
@@ -99,8 +102,11 @@ const Admin = () => {
             autoClose: 2000,
           });
         }
-      } catch (error) {
-        console.error("Error:", error);
+      } catch (err) {
+        console.error("Error:", err);
+        if ((err as Error).message === "Token expired.") {
+          handleLogout();
+        }
         // Gérez l'erreur ici, par exemple, en affichant un message d'erreur à l'utilisateur
       } finally {
         // Fermez la modal de confirmation
@@ -128,8 +134,8 @@ const Admin = () => {
                     value={wilder.role}
                     onChange={e => handleChangeRole(index, e.target.value)}>
                     <option value="admin">Admin</option>
-                    <option value="wilder">Wilder</option>
                     <option value="delegate">Delegate</option>
+                    <option value="wilder">Wilder</option>
                   </select>
                 </td>
                 <td>

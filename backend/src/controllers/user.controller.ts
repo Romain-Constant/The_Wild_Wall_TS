@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import User from 'types/user.type'
-import * as jwt from 'jsonwebtoken'
-import { JwtPayload } from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 import * as bcrypt from 'bcrypt'
 import * as userModel from '../models/user.model'
 
