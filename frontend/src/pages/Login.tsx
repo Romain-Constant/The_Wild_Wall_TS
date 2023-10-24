@@ -70,31 +70,30 @@ function Login() {
       <div className={styles.loginCard}>
         <div className={styles.loginCardHeader}>Login</div>
         <div className={styles.loginCardBody}>
-          <input
-            type="text"
-            id="log-username"
-            ref={loginRef}
-            placeholder="Username"
-            autoComplete="off"
-            className={styles.loginInputs}
-            value={logUsername}
-            onChange={e => setLogUsername(e.target.value)}
-          />
-          <input
-            type="password"
-            id="log-password"
-            placeholder="Password"
-            autoComplete="off"
-            className={styles.loginInputs}
-            value={logPassword}
-            onChange={e => setLogPassword(e.target.value)}
-          />
-          <button
-            type="button"
-            className={styles.loginButton}
-            onClick={handleLogin}>
-            Go !
-          </button>
+          <form className={styles.formContainer} onSubmit={handleLogin}>
+            <input
+              type="text"
+              id="log-username"
+              ref={loginRef}
+              placeholder="Username"
+              autoComplete="off"
+              className={styles.loginInputs}
+              value={logUsername}
+              onChange={e => setLogUsername(e.target.value)}
+            />
+            <input
+              type="password"
+              id="log-password"
+              placeholder="Password"
+              autoComplete="off"
+              className={styles.loginInputs}
+              value={logPassword}
+              onChange={e => setLogPassword(e.target.value)}
+            />
+            <button type="submit" className={styles.loginButton}>
+              Go !
+            </button>
+          </form>
           <p className={styles.noAccountText}>
             Don't have an account ?{" "}
             <Link to="/register" className={styles.signupLinkStyle}>
