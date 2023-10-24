@@ -16,17 +16,15 @@ function ConfirmationModal({
   if (!isOpen) return null;
 
   return (
-    <div className={styles.modal}>
-      <div className={styles.modalContent}>
-        <h2>Confirmation</h2>
-        <p>{message}</p>
-        <button className={styles.yesBtn} onClick={onConfirm}>
-          Oui
-        </button>
-        <button className={styles.noBtn} onClick={onClose}>
-          Non
-        </button>
-      </div>
+    <div className={styles.modalContent}>
+      <h2>Confirmation</h2>
+      <p>{message}</p>
+      <button className={styles.yesBtn} onClick={onConfirm}>
+        Yes
+      </button>
+      <button className={styles.noBtn} onClick={onClose}>
+        No
+      </button>
     </div>
   );
 }

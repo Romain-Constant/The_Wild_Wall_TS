@@ -1,8 +1,8 @@
 import {NavLink} from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
-import styles from "./ConsoleMenu.module.css";
+import styles from "./Navbar.module.css";
 
-function ConsoleMenu() {
+function Navbar() {
   const {auth} = useAuth();
 
   return (
@@ -35,4 +35,4 @@ function ConsoleMenu() {
   );
 }
 
-export default ConsoleMenu;
+export default Navbar;

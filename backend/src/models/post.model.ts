@@ -16,13 +16,12 @@ const executeQuery = <T>(queryString: string, params: (number | string)[] = []):
 
 export const findAllPosts = async (): Promise<Post[]> => {
   const queryString = `SELECT p.id AS postId, p.post_text AS postText, p.post_date AS postDate, s.statut_name AS statutName, u.id AS userId, u.username, c.color_code AS colorCode
-    FROM post AS p
-    JOIN ts_wild_wall.statut AS s ON p.statut_id = s.id
-    JOIN ts_wild_wall.user AS u ON p.user_id = u.id
-    JOIN ts_wild_wall.color AS c ON p.color_id = c.id
-    WHERE p.statut_id = 1
-    ;
-    `
+  FROM post AS p
+  JOIN ts_wild_wall.statut AS s ON p.statut_id = s.id
+  JOIN ts_wild_wall.user AS u ON p.user_id = u.id
+  JOIN ts_wild_wall.color AS c ON p.color_id = c.id
+  WHERE p.statut_id = 1
+  ORDER BY p.id ASC;`
   const rows = await executeQuery<RowDataPacket[]>(queryString)
 
   const posts: Post[] = rows.map((row) => ({
@@ -44,8 +43,7 @@ export const findAllArchivedPosts = async (): Promise<Post[]> => {
       JOIN ts_wild_wall.user AS u ON p.user_id = u.id
       JOIN ts_wild_wall.color AS c ON p.color_id = c.id
       WHERE p.statut_id = 2
-      ;
-      `
+      ORDER BY p.id ASC;`
   const rows = await executeQuery<RowDataPacket[]>(queryString)
 
   const posts: Post[] = rows.map((row) => ({

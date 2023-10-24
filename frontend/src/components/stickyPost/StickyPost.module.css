@@ -1,6 +1,6 @@
 .stickyPostContainer {
-  width: 300px;
-  height: 350px;
+  min-width: 250px;
+  height: 250px;
   box-shadow: 5px 5px 7px rgba(33, 33, 33, 0.7);
   padding: 0.5rem;
   display: flex;
@@ -26,7 +26,7 @@
 
 .stickyUsername,
 .stickyDate {
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 400;
   display: flex;
   align-items: center;
@@ -48,7 +48,7 @@
 
 .stickyText {
   font-family: var(--fontHand);
-  font-size: 1.7rem;
+  font-size: 1.5rem;
 }
 
 .stickyFooter {
@@ -97,4 +97,25 @@
 .editLink {
   text-decoration: none;
   color: inherit;
+}
+
+@media screen and (min-width: 768px) {
+  .stickyPostContainer {
+    width: 300px;
+    height: 350px;
+  }
+
+  .stickyUsername,
+  .stickyDate {
+    font-size: 1.2rem;
+  }
+
+  .stickyIcons {
+    font-size: 1rem;
+    margin-top: -2px;
+  }
+
+  .stickyText {
+    font-size: 1.7rem;
+  }
 }

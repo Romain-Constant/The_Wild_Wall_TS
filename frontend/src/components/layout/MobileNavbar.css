@@ -1,0 +1,165 @@
+.mobileNavbar {
+  width: 100%;
+  height: 80px;
+  padding: 1rem;
+  background-color: var(--black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.projectName {
+  height: 100%;
+  font-family: var(--fontHand);
+  font-size: 1rem;
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toastifyLogoutSuccess {
+  background-color: var(--black);
+  color: var(--white);
+}
+
+/* Position and sizing of burger button */
+.bm-burger-button {
+  position: fixed;
+  width: 30px;
+  height: 20px;
+  right: 15px;
+  top: 28px;
+}
+
+/* Color/shape of burger icon bars */
+.bm-burger-bars {
+  background: var(--white);
+}
+
+/* Color/shape of burger icon bars on hover*/
+.bm-burger-bars-hover {
+  background: var(--pink);
+}
+
+/* Position and sizing of clickable cross button */
+.bm-cross-button {
+  height: 24px;
+  width: 24px;
+}
+
+/* Color/shape of close button cross */
+.bm-cross {
+  background: var(--white);
+}
+
+/*
+Sidebar wrapper styles
+Note: Beware of modifying this element as it can break the animations - you should not need to touch it in most cases
+*/
+.bm-menu-wrap {
+  position: fixed;
+  height: 100%;
+}
+
+/* General sidebar styles */
+.bm-menu {
+  background: var(--black);
+  padding: 2.5em 1em 0;
+  font-size: 1em;
+}
+
+/* Wrapper for item list */
+.bm-item-list {
+  color: var(--white);
+  padding: 1em 0.2em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.menu-item,
+.writepost,
+.loginLink {
+  color: var(--white);
+}
+
+.menu-item:link,
+.writepost:link,
+.loginLink:link {
+  color: var(--white);
+  text-decoration: none;
+}
+
+.active {
+  color: var(--pink);
+}
+
+.writepost {
+  font-family: var(--fontHand);
+  font-size: 1.2em;
+}
+
+.loginText,
+.loggedUserText {
+  font-size: 1em;
+  font-weight: 400;
+  color: var(--white);
+}
+
+.loggedUserIcon {
+  margin-right: 10px;
+}
+
+.logoutIcon {
+  margin-left: 2px;
+}
+
+/* Individual item */
+.bm-item {
+  display: inline-block;
+  text-decoration: none;
+}
+
+/* Styling of overlay */
+.bm-overlay {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.separator {
+  width: 80%;
+  height: 1px;
+  background-color: var(--white);
+  margin: 2em 0;
+}
+
+.logoutIcon:hover {
+  cursor: pointer;
+}
+
+.logoAndTextContainer {
+  width: 100%;
+  position: fixed;
+  bottom: 18px;
+  display: flex !important;
+  align-items: center;
+}
+
+.logoContainer {
+  width: 75px;
+  height: 75px;
+  background-image: url("../../assets/wcs_logo.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.logoTextContainer {
+  width: 120px;
+  height: 100%;
+  color: var(--white);
+  font-family: var(--fontMontserrat);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 0.5rem;
+}

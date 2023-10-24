@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import * as postModel from '../models/post.model'
-import * as jwt from 'jsonwebtoken'
-import { JwtPayload } from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 import Post from 'types/post.type'
 
 const handleUnexpectedError = (res: Response) => {
@@ -61,6 +60,23 @@ export const addPost = async (req: Request, res: Response): Promise<Response> =>
   }
 
   try {
+    const jwtPassword = process.env.JWT_PASSWORD
+    const token = req.cookies.token
+
+    if (!token) {
+      return res.status(401).json({ error: 'Unauthorized' })
+    }
+
+    if (!jwtPassword) {
+      return res.status(500).json({ error: 'JWT secret key not defined.' })
+    }
+
+    const decodedToken = jwt.verify(token, jwtPassword) as JwtPayload
+
+    if (decodedToken.userId !== userId) {
+      return res.status(403).json({ error: 'Forbidden' })
+    }
+
     const result = await postModel.addPost(userId, postText, colorCode)
     return res.status(201).json({ success: `New post created!`, result })
   } catch (err) {

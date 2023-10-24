@@ -33,7 +33,7 @@
   flex: 1;
   height: 100%;
   font-family: var(--fontHand);
-  font-size: 2em;
+  font-size: 1.5em;
   color: var(--white);
   display: flex;
   align-items: center;
@@ -60,6 +60,10 @@
   margin-right: 5px;
 }
 
+.loginText:hover {
+  color: var(--pink);
+}
+
 .loggedUserText {
   display: flex;
   align-items: center;
@@ -81,4 +85,10 @@
 .toastifyLogoutSuccess {
   background-color: black;
   color: white;
+}
+
+@media screen and (min-width: 1024px) {
+  .projectName {
+    font-size: 2em;
+  }
 }
