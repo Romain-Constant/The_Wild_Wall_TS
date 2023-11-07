@@ -10,13 +10,20 @@ import styles from "./EditPost.module.css";
 import useAuth from "../hooks/useAuth";
 import Post from "../types/post.type";
 
+const TEXT_REGEX = /^(?=(?:\S\s*){10,}\S$).*$/;
+
 function EditPost() {
   const {auth} = useAuth();
   const [postText, setPostText] = useState<string>("");
+  const [isValidText, setIsValidText] = useState<boolean>(false);
   const [postColor, setPostColor] = useState<string>("#c7ebb3");
   const navigate = useNavigate();
   const {postId} = useParams();
   const [currentPost, setCurrentPost] = useState<Post | null>(null);
+
+  useEffect(() => {
+    setIsValidText(TEXT_REGEX.test(postText));
+  }, [postText]);
 
   useEffect(() => {
     const fetchPostById = async () => {
@@ -151,7 +158,7 @@ function EditPost() {
                 </div>
               </div>
 
-              {postText.length > 5 && (
+              {isValidText && (
                 <div className={styles.stickyButtonsContainer}>
                   <button
                     className={styles.sendButton}

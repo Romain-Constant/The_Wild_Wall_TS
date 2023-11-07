@@ -8,9 +8,17 @@
 }
 
 .wilderListContainer {
+  width: 330px;
+  height: 350px;
   background-color: var(--white);
-  border-radius: 15px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  overflow-y: auto;
+}
+
+.wilderListContainer thead th {
+  position: sticky;
+  top: 0;
+  background-color: var(--white);
 }
 
 .wilderListContainer table {
@@ -18,12 +26,13 @@
 }
 
 .wilderListContainer tr {
+  width: 100%;
   border-bottom: solid 1px var(--grey);
   border-collapse: collapse;
 }
 
 .wilderListContainer th {
-  padding: 1rem 3rem;
+  padding: 1rem 1rem;
   text-align: center;
 }
 
@@ -31,13 +40,14 @@
   border-bottom: solid 1px var(--grey);
   padding: 1rem 1rem;
   text-align: center;
+  font-size: 0.9rem;
 }
 
 .wilderListContainer select {
   border: none;
   font-family: var(--fontPoppins);
   cursor: pointer;
-  font-size: 1.1rem;
+  font-size: 0.9rem;
 }
 
 .wilderListContainer select:focus {
@@ -56,4 +66,20 @@
 .toastifySuccess {
   background-color: black;
   color: white;
+}
+
+@media screen and (min-width: 768px) {
+  .wilderListContainer {
+    width: auto;
+    height: 500px;
+  }
+
+  .wilderListContainer td,
+  .wilderListContainer select {
+    font-size: 1.1rem;
+  }
+
+  .wilderListContainer th {
+    padding: 1rem 3rem;
+  }
 }

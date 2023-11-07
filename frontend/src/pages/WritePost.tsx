@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {FaUserNinja, FaCalendarAlt} from "react-icons/fa";
 import {IoArrowBackCircleSharp} from "react-icons/io5";
@@ -9,12 +9,19 @@ import {baseUrl} from "../api/config";
 import useAuth from "../hooks/useAuth";
 import styles from "./WritePost.module.css";
 
+const TEXT_REGEX = /^(?=(?:\S\s*){10,}\S$).*$/;
+
 function WritePost() {
   const {auth} = useAuth();
   const [postText, setPostText] = useState<string>("");
+  const [isValidText, setIsValidText] = useState<boolean>(false);
   const [postColor, setPostColor] = useState<string>("#c7ebb3");
   const currentDate = new Date();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setIsValidText(TEXT_REGEX.test(postText));
+  }, [postText]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setPostText(event.target.value);
@@ -125,7 +132,7 @@ function WritePost() {
             </div>
           </div>
 
-          {postText.length > 5 && (
+          {isValidText && (
             <div className={styles.stickyButtonsContainer}>
               <button
                 type="button"

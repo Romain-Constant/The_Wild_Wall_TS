@@ -123,9 +123,10 @@ const Admin = () => {
             <tr>
               <th>Username</th>
               <th>Role</th>
+              <th></th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className={styles.tableBodyContainer}>
             {wilderList.map((wilder, index) => (
               <tr key={wilder.userId}>
                 <td>{wilder.username}</td>
