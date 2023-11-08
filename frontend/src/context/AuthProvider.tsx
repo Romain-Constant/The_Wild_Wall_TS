@@ -11,11 +11,6 @@ interface AuthContextDefault {
   setAuth: (a: AuthState) => void;
 }
 
-/* const AuthContext = createContext<{
-  auth: AuthState;
-  setAuth: React.Dispatch<React.SetStateAction<AuthState>>;
-}>({auth: {}, setAuth: () => {}}); */
-
 const AuthContext = createContext<AuthContextDefault>({
   auth: {},
   setAuth: () => {},

@@ -15,23 +15,7 @@ const Admin = () => {
   const [wilderList, setWilderList] = useState<User[]>([]);
   const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
   const navigate = useNavigate();
-  const {setAuth} = useAuth();
-
-  const handleLogout = async () => {
-    // Delete the authentication cookie
-    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    try {
-      await fetchData(`${baseUrl}/auth/logout`, {
-        method: "GET",
-      });
-
-      navigate("/login");
-
-      setAuth({});
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  const {auth, setAuth} = useAuth();
 
   useEffect(() => {
     const fetchAllWilders = async () => {
@@ -53,6 +37,22 @@ const Admin = () => {
     };
     fetchAllWilders();
   }, []);
+
+  const handleLogout = async () => {
+    // Delete the authentication cookie
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    try {
+      await fetchData(`${baseUrl}/auth/logout`, {
+        method: "GET",
+      });
+
+      navigate("/login");
+
+      setAuth({});
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const handleChangeRole = async (index: number, newRole: string) => {
     try {
@@ -127,28 +127,30 @@ const Admin = () => {
             </tr>
           </thead>
           <tbody className={styles.tableBodyContainer}>
-            {wilderList.map((wilder, index) => (
-              <tr key={wilder.userId}>
-                <td>{wilder.username}</td>
-                <td>
-                  <select
-                    value={wilder.role}
-                    onChange={e => handleChangeRole(index, e.target.value)}>
-                    <option value="admin">Admin</option>
-                    <option value="delegate">Delegate</option>
-                    <option value="wilder">Wilder</option>
-                  </select>
-                </td>
-                <td>
-                  <RxCross2
-                    type="button"
-                    className={styles.deleteIcon}
-                    onClick={() => handleDeleteWilder(index)}>
-                    Delete
-                  </RxCross2>
-                </td>
-              </tr>
-            ))}
+            {wilderList
+              .filter(wilder => wilder.userId !== auth.userId)
+              .map((wilder, index) => (
+                <tr key={wilder.userId}>
+                  <td>{wilder.username}</td>
+                  <td>
+                    <select
+                      value={wilder.role}
+                      onChange={e => handleChangeRole(index, e.target.value)}>
+                      <option value="admin">Admin</option>
+                      <option value="delegate">Delegate</option>
+                      <option value="wilder">Wilder</option>
+                    </select>
+                  </td>
+                  <td>
+                    <RxCross2
+                      type="button"
+                      className={styles.deleteIcon}
+                      onClick={() => handleDeleteWilder(index)}>
+                      Delete
+                    </RxCross2>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
