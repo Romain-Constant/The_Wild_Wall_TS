@@ -6,6 +6,7 @@ import {fetchData} from "../../api/api";
 import {baseUrl} from "../../api/config";
 import useAuth from "../../hooks/useAuth";
 import styles from "./Header.module.css";
+import {useEffect} from "react";
 
 function Header() {
   const {auth, setAuth} = useAuth();
@@ -29,6 +30,19 @@ function Header() {
 
     setAuth({});
   };
+
+  // add a check to see if the "auth" local storage is empty because the item is removed every 60 minutes. If yes, then logout to make username disappear from the header
+  useEffect(() => {
+    const timeout = setTimeout(
+      () => {
+        if (Object.keys(auth).length === 0) {
+          handleLogout();
+        }
+      },
+      5 * 60 * 1000,
+    );
+    return () => clearTimeout(timeout);
+  }, [auth]);
 
   return (
     <nav className={styles.navbarContainer}>
