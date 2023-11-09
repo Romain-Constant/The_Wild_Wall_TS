@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import User from 'types/user.type'
-import jwt, { JwtPayload } from 'jsonwebtoken'
 import * as bcrypt from 'bcrypt'
 import * as userModel from '../models/user.model'
 
@@ -10,19 +9,6 @@ const handleUnexpectedError = (res: Response) => {
 
 export const getAllUsers = async (req: Request, res: Response): Promise<Response> => {
   try {
-    const jwtPassword = process.env.JWT_PASSWORD
-    const token = req.cookies.token
-
-    if (!token) {
-      return res.status(401).json({ error: 'Unauthorized' })
-    }
-
-    if (!jwtPassword) {
-      return res.status(500).json({ error: 'JWT secret key not defined.' })
-    }
-
-    const decodedToken = jwt.verify(token, jwtPassword) as JwtPayload
-
     const users: User[] = await userModel.findAllUsers()
 
     if (users.length === 0) {
@@ -36,44 +22,11 @@ export const getAllUsers = async (req: Request, res: Response): Promise<Response
       role: user.role
     }))
 
-    if (decodedToken.roleCode !== '2013') {
+    if (req.user?.roleCode !== '2013') {
       return res.status(403).json({ error: 'Forbidden' })
     }
 
     return res.status(200).json(simplifiedUsers)
-  } catch (err) {
-    console.error(err)
-
-    if ((err as Error).name === 'TokenExpiredError') {
-      return res.status(401).json({ error: 'Token expired.' })
-    }
-
-    return handleUnexpectedError(res)
-  }
-}
-
-export const getUserById = async (req: Request, res: Response): Promise<Response> => {
-  const userId: number = parseInt(req.params.id, 10)
-  try {
-    const user: User | null = await userModel.findUserById(userId)
-    if (!user) {
-      return res.status(404).json({ error: 'No user found' })
-    }
-    return res.status(200).json({ user })
-  } catch (err) {
-    console.error(err)
-    return handleUnexpectedError(res)
-  }
-}
-
-export const getUserByUsername = async (req: Request, res: Response): Promise<Response> => {
-  const { username } = req.body
-  try {
-    const user: User | null = await userModel.findUserByUsername(username)
-    if (!user) {
-      return res.status(404).json({ error: 'No user found' })
-    }
-    return res.status(200).json({ user })
   } catch (err) {
     console.error(err)
     return handleUnexpectedError(res)
@@ -125,33 +78,28 @@ export const editUserRole = async (req: Request, res: Response): Promise<Respons
   const userId: number = parseInt(req.params.id, 10)
 
   try {
-    const jwtPassword = process.env.JWT_PASSWORD
-    const token = req.cookies.token
+    // Vérifiez d'abord si l'utilisateur existe
+    const user: User | null = await userModel.findUserById(userId)
 
-    if (!token) {
-      return res.status(401).json({ error: 'Unauthorized' })
+    if (!user) {
+      return res.status(404).json({ error: 'User not found.' })
     }
 
-    if (!jwtPassword) {
-      return res.status(500).json({ error: 'JWT secret key not defined.' })
-    }
-
-    const decodedToken = jwt.verify(token, jwtPassword) as JwtPayload
-
-    if (decodedToken.roleCode !== '2013') {
+    // Continuez avec la modification du rôle
+    if (req.user?.roleCode !== '2013') {
       return res.status(403).json({ error: 'Forbidden' })
     }
 
     const result = await userModel.updateRole(userId, roleCode)
 
     if (result.affectedRows === 0) {
-      return res.status(404).json({ error: 'User not found.' })
+      return res.status(500).json({ error: 'Update not possible. Unknown role.' })
     }
 
     return res.status(200).json({ message: 'Update successful.' })
   } catch (err) {
     console.error(err)
-    return res.status(500).json({ error: 'Update not possible. Unknown role.' })
+    return handleUnexpectedError(res)
   }
 }
 
@@ -159,20 +107,7 @@ export const deleteUser = async (req: Request, res: Response): Promise<Response>
   const userId: number = parseInt(req.params.id, 10)
 
   try {
-    const jwtPassword = process.env.JWT_PASSWORD
-    const token = req.cookies.token
-
-    if (!token) {
-      return res.status(401).json({ error: 'Unauthorized' })
-    }
-
-    if (!jwtPassword) {
-      return res.status(500).json({ error: 'JWT secret key not defined.' })
-    }
-
-    const decodedToken = jwt.verify(token, jwtPassword) as JwtPayload
-
-    if (decodedToken.roleCode !== '2013') {
+    if (req.user?.roleCode !== '2013') {
       return res.status(403).json({ error: 'Forbidden' })
     }
 

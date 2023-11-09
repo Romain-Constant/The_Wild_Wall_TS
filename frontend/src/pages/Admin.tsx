@@ -38,6 +38,8 @@ const Admin = () => {
     fetchAllWilders();
   }, []);
 
+  console.log(wilderList);
+
   const handleLogout = async () => {
     // Delete the authentication cookie
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
@@ -54,15 +56,14 @@ const Admin = () => {
     }
   };
 
-  const handleChangeRole = async (index: number, newRole: string) => {
+  const handleChangeRole = async (wilderId: number, newRole: string) => {
     try {
-      const updatedWilders = [...wilderList];
-
-      updatedWilders[index].role = newRole;
+      const updatedWilders = wilderList.map(wilder =>
+        wilder.userId === wilderId ? {...wilder, role: newRole} : wilder,
+      );
 
       setWilderList(updatedWilders);
 
-      const wilderId = updatedWilders[index].userId;
       await fetchData(`${baseUrl}/users/${wilderId}`, {
         method: "PUT",
         body: JSON.stringify({role: {name: newRole}}),
@@ -75,17 +76,16 @@ const Admin = () => {
     }
   };
 
-  const handleDeleteWilder = async (index: number) => {
-    // Ouvrir la modal de confirmation et conserver l'index
-    setDeletingIndex(index);
+  const handleDeleteWilder = async (wilderId: number) => {
+    // Ouvrir la modal de confirmation et conserver l'ID
+    setDeletingIndex(wilderId);
   };
 
   const handleConfirmDelete = async () => {
     if (deletingIndex !== null) {
-      const wilderId = wilderList[deletingIndex].userId;
       try {
         const response: ApiResponse<void> = await fetchData(
-          `${baseUrl}/users/${wilderId}`,
+          `${baseUrl}/users/${deletingIndex}`,
           {
             method: "DELETE",
           },
@@ -93,7 +93,7 @@ const Admin = () => {
 
         if (response.status === 200) {
           setWilderList(prevList =>
-            prevList.filter((_, i) => i !== deletingIndex),
+            prevList.filter(wilder => wilder.userId !== deletingIndex),
           );
 
           // Affichez une alerte de succès avec react-toastify
@@ -129,13 +129,17 @@ const Admin = () => {
           <tbody className={styles.tableBodyContainer}>
             {wilderList
               .filter(wilder => wilder.userId !== auth.userId)
-              .map((wilder, index) => (
+              .map(wilder => (
                 <tr key={wilder.userId}>
                   <td>{wilder.username}</td>
                   <td>
                     <select
                       value={wilder.role}
-                      onChange={e => handleChangeRole(index, e.target.value)}>
+                      onChange={e => {
+                        if (wilder.userId !== undefined) {
+                          handleChangeRole(wilder.userId, e.target.value);
+                        }
+                      }}>
                       <option value="admin">Admin</option>
                       <option value="delegate">Delegate</option>
                       <option value="wilder">Wilder</option>
@@ -145,7 +149,11 @@ const Admin = () => {
                     <RxCross2
                       type="button"
                       className={styles.deleteIcon}
-                      onClick={() => handleDeleteWilder(index)}>
+                      onClick={() => {
+                        if (wilder.userId !== undefined) {
+                          handleDeleteWilder(wilder.userId);
+                        }
+                      }}>
                       Delete
                     </RxCross2>
                   </td>
