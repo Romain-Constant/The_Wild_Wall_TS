@@ -9,7 +9,7 @@ import {baseUrl} from "../api/config";
 import useAuth from "../hooks/useAuth";
 import styles from "./WritePost.module.css";
 
-const TEXT_REGEX = /^(?=(?:\S\s*){10,}\S$).*$/;
+const TEXT_REGEX = /^(?!\s*$)(?=(?:\S\s*){10,}\S).*$/;
 
 function WritePost() {
   const {auth} = useAuth();
