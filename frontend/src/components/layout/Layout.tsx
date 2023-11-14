@@ -1,32 +1,47 @@
-import {Outlet} from "react-router-dom";
-import Header from "./Header";
-import Footer from "./Footer";
-import {useMediaQuery} from "react-responsive";
-import styles from "./Layout.module.css";
-import Navbar from "./Navbar";
-import MobileNavbar from "./MobileNavbar";
+// Import necessary dependencies and styles
+import {NavLink} from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
+import styles from "./Navbar.module.css";
 
-function Layout() {
-  const isDesktop = useMediaQuery({query: "(min-width: 768px)"});
+// Functional component for the navigation bar
+function Navbar() {
+  // Retrieve authentication information using the useAuth hook
+  const {auth} = useAuth();
 
+  // Render the navigation bar
   return (
-    <main className={styles.layoutContainer}>
-      {isDesktop ? (
-        <>
-          <Header />
-          <Navbar />
-          <Outlet />
-          <Footer />
-        </>
-      ) : (
-        <>
-          <MobileNavbar />
-          <Outlet />
-          <Footer />
-        </>
+    <div className={styles.consoleMenuContainer}>
+      {/* Navigation link for the Main Wall */}
+      <NavLink
+        to="/mainwall"
+        className={({isActive}) =>
+          isActive ? styles.activeButton : styles.consoleButton
+        }>
+        Main Wall
+      </NavLink>
+
+      {/* Navigation link for the Archives Wall */}
+      <NavLink
+        to="/archives"
+        className={({isActive}) =>
+          isActive ? styles.activeButton : styles.consoleButton
+        }>
+        Archives Wall
+      </NavLink>
+
+      {/* Conditional rendering of Admin Page link based on user role */}
+      {auth.roleCode === "2013" && (
+        <NavLink
+          to="/admin"
+          className={({isActive}) =>
+            isActive ? styles.activeButton : styles.consoleButton
+          }>
+          Admin Page
+        </NavLink>
       )}
-    </main>
+    </div>
   );
 }
 
-export default Layout;
+// Export the Navbar component as the default export
+export default Navbar;

@@ -22,11 +22,13 @@ function StickyPost({
   rotation,
   isArchivedPost,
 }: StickyPostProps) {
+  // Extracting data from postData and user authentication info
   const {username, postText, postDate, statutName, userId} = postData;
   const {auth} = useAuth();
   const isUserPost = auth.userId === userId;
   const isAdmin = auth.roleCode === "2013" || auth.roleCode === "4004";
 
+  // Function to render edit and delete buttons based on user role
   const renderEditAndDeleteButtons = () => {
     if (isUserPost) {
       return (
@@ -101,13 +103,14 @@ function StickyPost({
     return null;
   };
 
+  // JSX structure for the StickyPost component
   return (
     <div
       className={styles.stickyPostContainer}
       style={{
         backgroundColor:
           statutName === "archived" ? "grey" : postData.colorCode,
-        transform: `rotate(${rotation}deg)`, // Ajouter la rotation ici
+        transform: `rotate(${rotation}deg)`, // Add rotation here
       }}>
       <div className={styles.stickyHeader}>
         <h2 className={styles.stickyUsername}>

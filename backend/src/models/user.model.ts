@@ -2,7 +2,7 @@ import User from '../types/user.type'
 import connection from '../db-config'
 import { ResultSetHeader, RowDataPacket } from 'mysql2'
 
-// Fonction générique pour exécuter une requête SQL et renvoyer un résultat typé
+// Generic function to execute a query and return a promise
 const executeQuery = <T>(queryString: string, params: (number | string)[] = []): Promise<T> => {
   return new Promise<T>((resolve, reject) => {
     connection.query(queryString, params, (err, result) => {
@@ -18,7 +18,8 @@ const executeQuery = <T>(queryString: string, params: (number | string)[] = []):
 export const findAllUsers = async (): Promise<User[]> => {
   const queryString = `SELECT u.id, u.username, u.password, r.role_name, r.role_code
   FROM user AS u
-  JOIN ts_wild_wall.role AS r ON u.role_id = r.id;
+  JOIN ts_wild_wall.role AS r ON u.role_id = r.id
+  ORDER BY u.username;
   `
   const rows = await executeQuery<RowDataPacket[]>(queryString)
 

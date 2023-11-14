@@ -8,7 +8,6 @@ import {baseUrl} from "../api/config";
 import ConfirmationModal from "../components/confirmationModal/ConfirmationModal";
 import useAuth from "../hooks/useAuth";
 import User from "../types/user.type";
-
 import styles from "./Admin.module.css";
 
 const Admin = () => {
@@ -30,15 +29,13 @@ const Admin = () => {
         setWilderList(response.data);
       } catch (err) {
         console.error(err);
-        if ((err as Error).message === "Token expired.") {
+        if ((err as Error).message === "Token expired." || "Unauthorized") {
           handleLogout();
         }
       }
     };
     fetchAllWilders();
   }, []);
-
-  console.log(wilderList);
 
   const handleLogout = async () => {
     // Delete the authentication cookie
@@ -58,26 +55,34 @@ const Admin = () => {
 
   const handleChangeRole = async (wilderId: number, newRole: string) => {
     try {
-      const updatedWilders = wilderList.map(wilder =>
-        wilder.userId === wilderId ? {...wilder, role: newRole} : wilder,
+      const response: ApiResponse<void> = await fetchData(
+        `${baseUrl}/users/${wilderId}`,
+        {
+          method: "PUT",
+          body: JSON.stringify({role: {name: newRole}}),
+        },
       );
 
-      setWilderList(updatedWilders);
-
-      await fetchData(`${baseUrl}/users/${wilderId}`, {
-        method: "PUT",
-        body: JSON.stringify({role: {name: newRole}}),
-      });
+      if (response.status === 200) {
+        // Update local wilder List only if the request was successful
+        const updatedWilders = wilderList.map(wilder =>
+          wilder.userId === wilderId ? {...wilder, role: newRole} : wilder,
+        );
+        setWilderList(updatedWilders);
+      } else {
+        // Handle other status codes if needed
+        console.error("Update failed:", response.data);
+      }
     } catch (err) {
       console.error("Error:", err);
-      if ((err as Error).message === "Token expired.") {
+      if ((err as Error).message === "Token expired." || "Unauthorized") {
         handleLogout();
       }
     }
   };
 
   const handleDeleteWilder = async (wilderId: number) => {
-    // Ouvrir la modal de confirmation et conserver l'ID
+    // Open the confirmation modal and keep the ID
     setDeletingIndex(wilderId);
   };
 
@@ -96,7 +101,7 @@ const Admin = () => {
             prevList.filter(wilder => wilder.userId !== deletingIndex),
           );
 
-          // Affichez une alerte de succès avec react-toastify
+          // Show a success alert with react-toastify
           toast.success("Wilder deleted successfully!", {
             className: styles.toastifySuccess,
             autoClose: 2000,
@@ -104,12 +109,11 @@ const Admin = () => {
         }
       } catch (err) {
         console.error("Error:", err);
-        if ((err as Error).message === "Token expired.") {
+        if ((err as Error).message === "Token expired." || "Unauthorized") {
           handleLogout();
         }
-        // Gérez l'erreur ici, par exemple, en affichant un message d'erreur à l'utilisateur
       } finally {
-        // Fermez la modal de confirmation
+        // Close the confirmation modal
         setDeletingIndex(null);
       }
     }

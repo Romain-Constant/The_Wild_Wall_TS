@@ -9,6 +9,7 @@ import {baseUrl} from "../api/config";
 import useAuth from "../hooks/useAuth";
 import styles from "./WritePost.module.css";
 
+// Regular expression to check if the text contains at least 10 non-whitespace characters
 const TEXT_REGEX = /^(?!\s*$)(?=(?:\S\s*){10,}\S).*$/;
 
 function WritePost() {
@@ -19,14 +20,22 @@ function WritePost() {
   const currentDate = new Date();
   const navigate = useNavigate();
 
+  // useEffect to validate the post text using the defined regular expression
   useEffect(() => {
     setIsValidText(TEXT_REGEX.test(postText));
   }, [postText]);
 
+  // Event handler for text area input change
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setPostText(event.target.value);
   };
 
+  // Event handler for changing the post color
+  const handleColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPostColor(event.target.value);
+  };
+
+  // Event handler for submitting the post
   const handleSubmit = async () => {
     try {
       await fetchData(`${baseUrl}/posts`, {
@@ -38,15 +47,12 @@ function WritePost() {
         }),
       });
 
+      // Resetting the post text and navigating to the main wall
       setPostText("");
       navigate("/mainwall");
     } catch (err) {
       console.error("Error:", err);
     }
-  };
-
-  const handleColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPostColor(event.target.value);
   };
 
   return (
@@ -56,9 +62,11 @@ function WritePost() {
           <IoArrowBackCircleSharp className={styles.backIcon} />
         </div>
       </Link>
+      {/* Sticky post container for writing a new post */}
       <div
         className={styles.stickyPostContainer}
         style={{backgroundColor: postColor}}>
+        {/* Sticky post header with user's username and current date */}
         <div className={styles.stickyHeader}>
           <h2 className={styles.stickyUsername}>
             <FaUserNinja className={styles.stickyIcons} />
@@ -70,6 +78,7 @@ function WritePost() {
           </h2>
         </div>
         <div className={styles.separator} />
+        {/* Sticky post text area for writing the post content */}
         <div className={styles.stickyTextContainer}>
           <textarea
             value={postText}
@@ -78,9 +87,12 @@ function WritePost() {
             placeholder="Write here..."
           />
         </div>
+        {/* Sticky post footer with color options and send button */}
         <div className={styles.stickyFooter}>
+          {/* Left section with color options */}
           <div className={styles.footerLeft}>
             <div className={styles.colorContainer}>
+              {/* Radio buttons for color options */}
               <label>
                 <input
                   type="radio"
@@ -131,13 +143,14 @@ function WritePost() {
               </label>
             </div>
           </div>
-
+          {/* Right section with send button */}
           {isValidText && (
             <div className={styles.stickyButtonsContainer}>
               <button
                 type="button"
                 className={styles.sendButton}
                 onClick={handleSubmit}>
+                {/* Icon container for the send button */}
                 <div className={styles.iconCircleContainer}>
                   <BsFillSendFill className={styles.penIcon} />
                 </div>

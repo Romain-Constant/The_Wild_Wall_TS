@@ -32,15 +32,15 @@ export const loginUser = async (req: Request, res: Response): Promise<Response> 
 
         return res.status(200).json({ username: user.username, roleCode, userId })
       } else {
-        // Mot de passe incorrect
+        // Invalid password
         return res.status(401).json({ error: 'Authentication failed. Invalid password.' })
       }
     } else {
-      // Utilisateur non trouvé
+      // User not found
       return res.status(401).json({ error: 'Authentication failed. User not found.' })
     }
   } catch (err) {
-    // Erreur serveur
+    // Unexpected error
     console.error(err)
     return res.status(500).json({ error: 'Internal server error.' })
   }
@@ -48,13 +48,13 @@ export const loginUser = async (req: Request, res: Response): Promise<Response> 
 
 export const logout = async (req: Request, res: Response): Promise<Response> => {
   try {
-    // Effacez le cookie du token
+    // Clear the cookie
     res.clearCookie('token', { httpOnly: true })
 
-    // Répondez avec un message de déconnexion réussie
+    // Send a success message
     return res.status(200).json({ message: 'Logout successful' })
   } catch (err) {
-    // En cas d'erreur, répondez avec une erreur serveur
+    // Unexpected error
     console.error(err)
     return res.status(500).json({ error: 'Internal server error.' })
   }

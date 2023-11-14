@@ -7,15 +7,19 @@ import {fetchData, ApiResponse} from "../api/api";
 import {baseUrl} from "../api/config";
 import styles from "./Register.module.css";
 
+// Regular expressions for username and password validation
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
 function Register() {
+  // Refs to track error messages and username input field
   const errRef = useRef<HTMLParagraphElement>(null);
   const userRef = useRef<HTMLInputElement>(null);
 
+  // Hook for navigation
   const navigate = useNavigate();
 
+  // State variables for username, password, and their validations
   const [regUsername, setRegUsername] = useState<string>("");
   const [validName, setValidName] = useState<boolean>(false);
   const [userFocus, setUserFocus] = useState<boolean>(false);
@@ -28,32 +32,39 @@ function Register() {
   const [validMatch, setValidMatch] = useState<boolean>(false);
   const [matchFocus, setMatchFocus] = useState<boolean>(false);
 
+  // State variables for error handling
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [errorVisible, setErrorVisible] = useState<boolean>(false);
 
+  // Effect to focus on the username input field when the component mounts
   useEffect(() => {
     userRef.current?.focus();
   }, []);
 
+  // Effect to validate the username using regex
   useEffect(() => {
     setValidName(USER_REGEX.test(regUsername));
   }, [regUsername]);
 
+  // Effect to validate the password using regex and match with the confirm password
   useEffect(() => {
     setValidPwd(PWD_REGEX.test(regPassword));
     setValidMatch(regPassword === matchPwd);
   }, [regPassword, matchPwd]);
 
+  // Effect to show error message when it is not an empty string
   useEffect(() => {
     if (errorMessage !== "") {
       setErrorVisible(true);
     }
   }, [errorMessage]);
 
+  // Handling the registration process
   const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     try {
+      // Making a request to register the user
       const response: ApiResponse<void> = await fetchData<void>(
         `${baseUrl}/users/register`,
         {
@@ -65,6 +76,7 @@ function Register() {
         },
       );
 
+      // Checking the response status
       if (response.status === 201) {
         // Show success toast
         toast.success("Register successful!", {
@@ -92,6 +104,7 @@ function Register() {
     setMatchPwd("");
   };
 
+  // JSX structure for the Register component
   return (
     <div className={styles.registerPageContainer}>
       <p
@@ -104,6 +117,7 @@ function Register() {
         <div className={styles.loginCardHeader}>Register</div>
         <div className={styles.loginCardBody}>
           <form className={styles.formContainer} onSubmit={handleRegister}>
+            {/* Username input field */}
             <input
               type="text"
               id="reg-username"
@@ -116,6 +130,7 @@ function Register() {
               onFocus={() => setUserFocus(true)}
               onBlur={() => setUserFocus(false)}
             />
+            {/* Instructions for username validation */}
             <p
               id="uidnote"
               className={
@@ -130,6 +145,7 @@ function Register() {
               <br />
               Letters, numbers, underscores, hyphens allowed.
             </p>
+            {/* Password input field */}
             <input
               type="password"
               id="reg-password"
@@ -141,6 +157,7 @@ function Register() {
               onFocus={() => setPwdFocus(true)}
               onBlur={() => setPwdFocus(false)}
             />
+            {/* Instructions for password validation */}
             <p
               id="pwdnote"
               className={
@@ -159,6 +176,7 @@ function Register() {
               <span aria-label="dollar sign">$</span>{" "}
               <span aria-label="percent">%</span>
             </p>
+            {/* Confirm password input field */}
             <input
               type="password"
               id="confirm-password"
@@ -170,6 +188,7 @@ function Register() {
               onFocus={() => setMatchFocus(true)}
               onBlur={() => setMatchFocus(false)}
             />
+            {/* Instructions for confirming password */}
             <p
               id="confirmnote"
               className={
@@ -180,15 +199,17 @@ function Register() {
               <FontAwesomeIcon icon={faInfoCircle} />
               Must match the first password input field.
             </p>
+            {/* Submit button */}
             <button
               type="submit"
               className={styles.loginButton}
               disabled={!!(!validName || !validPwd || !validMatch)}>
-              Register me !
+              Register me!
             </button>
           </form>
+          {/* Link to the login page */}
           <p className={styles.noAccountText}>
-            Already have an account ?{" "}
+            Already have an account?{" "}
             <Link to="/login" className={styles.signupLinkStyle}>
               Login
             </Link>

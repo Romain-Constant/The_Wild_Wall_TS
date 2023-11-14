@@ -25,6 +25,7 @@ function App() {
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="unauthorized" element={<Unauthorized />} />
+
         {/* ROUTES WHICH NEEDS AUTHENT */}
         <Route
           element={

@@ -22,10 +22,12 @@ function EditPost() {
   const [currentPost, setCurrentPost] = useState<Post | null>(null);
 
   useEffect(() => {
+    // Update the validity of the post text whenever it changes
     setIsValidText(TEXT_REGEX.test(postText));
   }, [postText]);
 
   useEffect(() => {
+    // Fetch post data when the component mounts
     const fetchPostById = async () => {
       try {
         const response: ApiResponse<{post: Post}> = await fetchData(
@@ -35,6 +37,7 @@ function EditPost() {
           },
         );
 
+        // Set the current post and update the text and color state
         setCurrentPost(response.data.post);
         setPostText(response.data.post.postText);
         setPostColor(response.data.post.colorCode);
@@ -47,6 +50,7 @@ function EditPost() {
 
   const handleSubmit = async () => {
     try {
+      // Update the post on the server using a PUT request
       await fetchData(`${baseUrl}/posts`, {
         method: "PUT",
         body: JSON.stringify({
@@ -56,6 +60,7 @@ function EditPost() {
         }),
       });
 
+      // Reset the post text and navigate back to the main wall
       setPostText("");
       navigate("/mainwall");
     } catch (err) {
@@ -64,18 +69,20 @@ function EditPost() {
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    // Update the post text state when the input changes
     setPostText(event.target.value);
   };
 
   const handleColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // Update the post color state when the color input changes
     setPostColor(event.target.value);
   };
 
   return (
     <div className={styles.writePostContainer}>
-      {currentPost === null ? ( // Affichage pendant le chargement
+      {currentPost === null ? ( // Display loading message during data retrieval
         <p>Loading...</p>
-      ) : currentPost.userId === auth.userId ? (
+      ) : currentPost.userId === auth.userId ? ( // Display edit form if authorized
         <>
           <Link to="/mainwall" className={styles.linkContainer}>
             <div className={styles.backIconContainer}>
@@ -107,6 +114,7 @@ function EditPost() {
             <div className={styles.stickyFooter}>
               <div className={styles.footerLeft}>
                 <div className={styles.colorContainer}>
+                  {/* Radio buttons for selecting post color */}
                   <label>
                     <input
                       type="radio"
@@ -157,7 +165,7 @@ function EditPost() {
                   </label>
                 </div>
               </div>
-
+              {/* Display send button if the text is valid */}
               {isValidText && (
                 <div className={styles.stickyButtonsContainer}>
                   <button
@@ -174,6 +182,7 @@ function EditPost() {
           </div>
         </>
       ) : (
+        // Display unauthorized message if the user is not the owner of the post
         <h1>You're not authorized</h1>
       )}
     </div>

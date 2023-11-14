@@ -78,14 +78,14 @@ export const editUserRole = async (req: Request, res: Response): Promise<Respons
   const userId: number = parseInt(req.params.id, 10)
 
   try {
-    // Vérifiez d'abord si l'utilisateur existe
+    // Check if the user exists in the database
     const user: User | null = await userModel.findUserById(userId)
 
     if (!user) {
       return res.status(404).json({ error: 'User not found.' })
     }
 
-    // Continuez avec la modification du rôle
+    // If the user exists, proceed with update
     if (req.user?.roleCode !== '2013') {
       return res.status(403).json({ error: 'Forbidden' })
     }
@@ -111,14 +111,14 @@ export const deleteUser = async (req: Request, res: Response): Promise<Response>
       return res.status(403).json({ error: 'Forbidden' })
     }
 
-    // Vérifiez d'abord si l'utilisateur existe
+    // Check if the user exists in the database
     const user: User | null = await userModel.findUserById(userId)
 
     if (!user) {
       return res.status(404).json({ error: 'No user found' })
     }
 
-    // Si l'utilisateur existe, procédez à sa suppression
+    // If the user exists, proceed with deletion
     const result = await userModel.deleteUser(userId)
 
     if (result.affectedRows > 0) {

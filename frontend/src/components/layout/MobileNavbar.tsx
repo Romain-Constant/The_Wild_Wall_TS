@@ -11,9 +11,11 @@ import useAuth from "../../hooks/useAuth";
 import "./MobileNavbar.css";
 
 const MobileNavbar = () => {
+  // State to manage the open/closed state of the mobile menu
   const [menuOpen, setMenuOpen] = useState(false);
   const {auth, setAuth} = useAuth();
 
+  // Function to handle logout
   const handleLogout = async () => {
     // Delete the authentication cookie
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
@@ -31,14 +33,17 @@ const MobileNavbar = () => {
       console.error(err);
     }
 
+    // Reset authentication state and close the menu
     setAuth({});
     closeMenu();
   };
 
+  // Function to close the mobile menu
   const closeMenu = () => {
     setMenuOpen(false);
   };
 
+  // Function to handle changes in the menu state
   // @ts-ignore
   const handleStateChange = state => {
     setMenuOpen(state.isOpen);
@@ -46,12 +51,14 @@ const MobileNavbar = () => {
 
   return (
     <div id="outer-container">
+      {/* Mobile menu component */}
       <Menu
         right
         width="50%"
         isOpen={menuOpen}
         // @ts-ignore
         onStateChange={state => handleStateChange(state)}>
+        {/* Menu items */}
         <NavLink
           id="writepost"
           className="writepost"
@@ -88,6 +95,7 @@ const MobileNavbar = () => {
 
         <div className="separator" />
 
+        {/* Conditional rendering based on authentication status */}
         {Object.keys(auth).length !== 0 ? (
           <>
             <h1 className="loggedUserText">
@@ -117,6 +125,7 @@ const MobileNavbar = () => {
           </>
         )}
 
+        {/* Logo and text */}
         <div className="logoAndTextContainer">
           <div className="logoContainer" />
           <div className="logoTextContainer">
@@ -126,6 +135,8 @@ const MobileNavbar = () => {
           </div>
         </div>
       </Menu>
+
+      {/* Main content */}
       <div id="page-wrap">
         <div className="mobileNavbar">
           <div className="projectName">

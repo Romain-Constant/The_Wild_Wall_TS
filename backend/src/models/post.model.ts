@@ -2,6 +2,7 @@ import Post from '../types/post.type'
 import connection from '../db-config'
 import { ResultSetHeader, RowDataPacket } from 'mysql2'
 
+// Generic function to execute a query and return a promise
 const executeQuery = <T>(queryString: string, params: (number | string)[] = []): Promise<T> => {
   return new Promise<T>((resolve, reject) => {
     connection.query(queryString, params, (err, result) => {
