@@ -18,7 +18,8 @@ const executeQuery = <T>(queryString: string, params: (number | string)[] = []):
 export const findAllUsers = async (): Promise<User[]> => {
   const queryString = `SELECT u.id, u.username, u.password, r.role_name, r.role_code
   FROM user AS u
-  JOIN ts_wild_wall.role AS r ON u.role_id = r.id;
+  JOIN ts_wild_wall.role AS r ON u.role_id = r.id
+  ORDER BY u.username;
   `
   const rows = await executeQuery<RowDataPacket[]>(queryString)
 
