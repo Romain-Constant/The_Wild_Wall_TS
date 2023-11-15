@@ -124,8 +124,8 @@
 }
 
 .toastifySuccess {
-  background-color: black;
-  color: white;
+  background-color: var(--black);
+  color: var(--white);
 }
 
 @media screen and (min-width: 768px) {

@@ -1,5 +1,9 @@
-import {createContext, useState, useEffect} from "react";
-import {ReactNode} from "react";
+// AuthProvider component manages the authentication state using React context.
+// It initializes the authentication state from local storage or sets it to an empty object.
+// The component provides a context with the current authentication state and a function to update it.
+// The authentication state is saved to local storage whenever it changes.
+// Additionally, the component clears the authentication state from local storage after 60 minutes to enhance security.
+import {createContext, useState, useEffect, ReactNode} from "react";
 import {AuthState} from "../types/auth.type";
 
 interface AuthProps {
@@ -17,6 +21,7 @@ const AuthContext = createContext<AuthContextDefault>({
 });
 
 export function AuthProvider({children}: AuthProps) {
+  // Retrieve the authentication state from local storage or set it to an empty object
   const localStorageAuthItem = localStorage.getItem("auth");
   const initialAuth =
     localStorageAuthItem !== null ? JSON.parse(localStorageAuthItem) : {};

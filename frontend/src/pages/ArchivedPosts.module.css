@@ -23,7 +23,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 150px;
-  background: #f4dfcd;
+  background: var(--champagne);
   box-shadow:
     5px -5px 10px #cfbeae,
     -5px 5px 10px #ffffec;

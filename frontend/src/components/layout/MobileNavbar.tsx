@@ -1,3 +1,11 @@
+// MobileNavbar component provides a responsive navigation menu for mobile devices.
+// It utilizes the react-burger-menu library for the sliding menu effect.
+// The menu items include Write Post, Main Wall, Archives Wall, and Admin Page (if the user has admin rights).
+// User authentication is handled, displaying the username and logout option when logged in.
+// The menu can be opened or closed, triggering the state change accordingly.
+// The component also includes a logo and project name.
+// The navigation links use React Router's NavLink for seamless routing.
+// Logout functionality clears the authentication cookie, logs the user out, and displays a success toast.
 import {useState} from "react";
 //@ts-ignore
 import {slide as Menu} from "react-burger-menu";

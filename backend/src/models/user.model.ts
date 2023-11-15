@@ -2,7 +2,7 @@ import User from '../types/user.type'
 import connection from '../db-config'
 import { ResultSetHeader, RowDataPacket } from 'mysql2'
 
-// Fonction générique pour exécuter une requête SQL et renvoyer un résultat typé
+// Generic function to execute a query and return a promise
 const executeQuery = <T>(queryString: string, params: (number | string)[] = []): Promise<T> => {
   return new Promise<T>((resolve, reject) => {
     connection.query(queryString, params, (err, result) => {

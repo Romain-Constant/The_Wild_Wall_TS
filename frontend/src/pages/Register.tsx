@@ -7,53 +7,66 @@ import {fetchData, ApiResponse} from "../api/api";
 import {baseUrl} from "../api/config";
 import styles from "./Register.module.css";
 
+// Regular expressions for username and password validation
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
 function Register() {
+  // Refs for error message and username input
   const errRef = useRef<HTMLParagraphElement>(null);
   const userRef = useRef<HTMLInputElement>(null);
 
+  // Navigation function from React Router
   const navigate = useNavigate();
 
+  // State for username, its validity, and focus state
   const [regUsername, setRegUsername] = useState<string>("");
   const [validName, setValidName] = useState<boolean>(false);
   const [userFocus, setUserFocus] = useState<boolean>(false);
 
+  // State for password, its validity, and focus state
   const [regPassword, setRegPassword] = useState<string>("");
   const [validPwd, setValidPwd] = useState<boolean>(false);
   const [pwdFocus, setPwdFocus] = useState<boolean>(false);
 
+  // State for confirming password, its validity, and focus state
   const [matchPwd, setMatchPwd] = useState<string>("");
   const [validMatch, setValidMatch] = useState<boolean>(false);
   const [matchFocus, setMatchFocus] = useState<boolean>(false);
 
+  // State for error message, and its visibility
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [errorVisible, setErrorVisible] = useState<boolean>(false);
 
+  // Focus on the username input when the component mounts
   useEffect(() => {
     userRef.current?.focus();
   }, []);
 
+  // Update username validity based on regex test
   useEffect(() => {
     setValidName(USER_REGEX.test(regUsername));
   }, [regUsername]);
 
+  // Update password and confirmation password validity based on regex test
   useEffect(() => {
     setValidPwd(PWD_REGEX.test(regPassword));
     setValidMatch(regPassword === matchPwd);
   }, [regPassword, matchPwd]);
 
+  // Show error message when there is an error
   useEffect(() => {
     if (errorMessage !== "") {
       setErrorVisible(true);
     }
   }, [errorMessage]);
 
+  // Handle registration form submission
   const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     try {
+      // Send a registration request to the server
       const response: ApiResponse<void> = await fetchData<void>(
         `${baseUrl}/users/register`,
         {
@@ -92,6 +105,7 @@ function Register() {
     setMatchPwd("");
   };
 
+  // Render the registration form component
   return (
     <div className={styles.registerPageContainer}>
       <p
@@ -116,6 +130,7 @@ function Register() {
               onFocus={() => setUserFocus(true)}
               onBlur={() => setUserFocus(false)}
             />
+            {/* Instruction note for username */}
             <p
               id="uidnote"
               className={
@@ -141,6 +156,7 @@ function Register() {
               onFocus={() => setPwdFocus(true)}
               onBlur={() => setPwdFocus(false)}
             />
+            {/* Instruction note for password */}
             <p
               id="pwdnote"
               className={
@@ -170,6 +186,7 @@ function Register() {
               onFocus={() => setMatchFocus(true)}
               onBlur={() => setMatchFocus(false)}
             />
+            {/* Instruction note for confirming password */}
             <p
               id="confirmnote"
               className={

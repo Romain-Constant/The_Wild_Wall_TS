@@ -10,6 +10,7 @@ import Unauthorized from "./pages/Unauthorized";
 import WritePost from "./pages/WritePost";
 import Admin from "./pages/Admin";
 
+// Define role codes
 const ROLES = {
   admin: "2013",
   delegate: "4004",
@@ -19,23 +20,28 @@ const ROLES = {
 function App() {
   return (
     <Routes>
+      {/* Base route with layout */}
       <Route path="/" element={<Layout />}>
+        {/* Public routes */}
         <Route path="mainwall" element={<MainWall />} />
         <Route path="archives" element={<ArchivedPosts />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="unauthorized" element={<Unauthorized />} />
-        {/* ROUTES WHICH NEEDS AUTHENT */}
+
+        {/* Routes requiring authentication */}
         <Route
           element={
             <RequireAuth
               allowedRoles={[ROLES.admin, ROLES.delegate, ROLES.wilder]}
             />
           }>
+          {/* Authenticated user routes */}
           <Route path="writepost" element={<WritePost />} />
           <Route path="editpost/:postId" element={<EditPost />} />
         </Route>
 
+        {/* Routes accessible only to admins */}
         <Route element={<RequireAuth allowedRoles={[ROLES.admin]} />}>
           <Route path="admin" element={<Admin />} />
         </Route>

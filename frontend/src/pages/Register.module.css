@@ -113,15 +113,15 @@
 }
 
 .toastifySuccess {
-  background-color: black;
-  color: white;
+  background-color: var(--black);
+  color: var(--white);
 }
 
 .instructions {
   font-size: 0.75rem;
   border-radius: 0.5rem;
-  background: #000;
-  color: #fff;
+  background: var(--black);
+  color: var(--white);
   padding: 0.25rem;
   position: relative;
   bottom: -10px;

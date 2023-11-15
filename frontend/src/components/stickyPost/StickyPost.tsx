@@ -1,3 +1,8 @@
+// StickyPost component renders a sticky note containing post information.
+// It displays the username, post date, post text, and provides buttons for actions such as edit, archive, and delete.
+// The component receives post data, handles delete and archive callbacks, rotation degree, and a flag indicating if it's an archived post.
+// The buttons are conditionally rendered based on user authentication and authorization (user, admin or delegate).
+
 import {BsFillPencilFill} from "react-icons/bs";
 import {FaArchive, FaCalendarAlt, FaUserNinja} from "react-icons/fa";
 import {IoIosCloseCircle} from "react-icons/io";
@@ -29,6 +34,7 @@ function StickyPost({
 
   const renderEditAndDeleteButtons = () => {
     if (isUserPost) {
+      // Render edit and delete buttons for the post owner
       return (
         <div className={styles.stickyButtonsContainer}>
           {!isArchivedPost && (
@@ -70,7 +76,9 @@ function StickyPost({
         </div>
       );
     }
+
     if (isAdmin) {
+      // Render archive and delete buttons for admin users
       return (
         <div className={styles.stickyButtonsContainer}>
           {!isArchivedPost && (
@@ -98,6 +106,7 @@ function StickyPost({
         </div>
       );
     }
+
     return null;
   };
 
@@ -107,7 +116,7 @@ function StickyPost({
       style={{
         backgroundColor:
           statutName === "archived" ? "grey" : postData.colorCode,
-        transform: `rotate(${rotation}deg)`, // Ajouter la rotation ici
+        transform: `rotate(${rotation}deg)`,
       }}>
       <div className={styles.stickyHeader}>
         <h2 className={styles.stickyUsername}>

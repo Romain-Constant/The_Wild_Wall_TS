@@ -15,7 +15,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 150px;
-  background: #f4dfcd;
+  background: var(--champagne);
   box-shadow:
     5px -5px 10px #cfbeae,
     -5px 5px 10px #ffffec;
@@ -146,16 +146,16 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  border: 2px solid #fff;
+  border: 2px solid var(--white);
   cursor: pointer;
 }
 
 .colorContainer label input:checked + .radioColor {
-  border: 2px solid #000; /* Change the border color when the radio button is checked */
+  border: 2px solid var(--black); /* Change the border color when the radio button is checked */
 }
 
 .colorContainer label input:focus + .radioColor {
-  box-shadow: 0 0 5px #000; /* Optional: Add a box-shadow when the radio button is focused */
+  box-shadow: 0 0 5px var(--black); /* Optional: Add a box-shadow when the radio button is focused */
 }
 
 .stickyButtonsContainer {

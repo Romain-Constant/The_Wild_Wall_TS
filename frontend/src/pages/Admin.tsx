@@ -12,11 +12,19 @@ import User from "../types/user.type";
 import styles from "./Admin.module.css";
 
 const Admin = () => {
+  // State for storing the list of wilders
   const [wilderList, setWilderList] = useState<User[]>([]);
+
+  // State for storing the index of the wilder to be deleted
   const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
+
+  // Navigate function for programmatic navigation
   const navigate = useNavigate();
+
+  // Auth context to get current user information
   const {auth, setAuth} = useAuth();
 
+  // Fetch the list of wilders on component mount
   useEffect(() => {
     const fetchAllWilders = async () => {
       try {
@@ -27,63 +35,87 @@ const Admin = () => {
           },
         );
 
+        // Update the wilder list state
         setWilderList(response.data);
       } catch (err) {
-        console.error(err);
-        if ((err as Error).message === "Token expired.") {
+        console.error("Error:", err);
+        // Handle token expiration by logging out
+        if ((err as Error).message === "Token expired." || "Unauthorized") {
           handleLogout();
         }
       }
     };
+
+    // Invoke the fetch function
     fetchAllWilders();
   }, []);
 
-  console.log(wilderList);
-
+  // Function to handle user logout
   const handleLogout = async () => {
     // Delete the authentication cookie
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
     try {
+      // Call the logout API
       await fetchData(`${baseUrl}/auth/logout`, {
         method: "GET",
       });
 
+      // Redirect to the login page
       navigate("/login");
 
+      // Clear the auth context
       setAuth({});
     } catch (err) {
-      console.error(err);
+      console.error("Error:", err);
     }
   };
 
+  // Function to handle role change for a wilder
   const handleChangeRole = async (wilderId: number, newRole: string) => {
     try {
-      const updatedWilders = wilderList.map(wilder =>
-        wilder.userId === wilderId ? {...wilder, role: newRole} : wilder,
+      // Call the API to update the role
+      const response: ApiResponse<void> = await fetchData(
+        `${baseUrl}/users/${wilderId}`,
+        {
+          method: "PUT",
+          body: JSON.stringify({role: {name: newRole}}),
+        },
       );
 
-      setWilderList(updatedWilders);
+      // Check if the API call was successful
+      if (response.status === 200) {
+        // Update the role in the local state
+        const updatedWilders = wilderList.map(wilder =>
+          wilder.userId === wilderId ? {...wilder, role: newRole} : wilder,
+        );
 
-      await fetchData(`${baseUrl}/users/${wilderId}`, {
-        method: "PUT",
-        body: JSON.stringify({role: {name: newRole}}),
-      });
+        // Update the state with the new roles
+        setWilderList(updatedWilders);
+      } else {
+        // Handle the error, e.g., by displaying an error message to the user
+        console.error("Failed to update role:", response.status);
+      }
     } catch (err) {
       console.error("Error:", err);
-      if ((err as Error).message === "Token expired.") {
+      // Handle token expiration by logging out
+      if ((err as Error).message === "Token expired." || "Unauthorized") {
         handleLogout();
       }
     }
   };
 
+  // Function to handle wilder deletion
   const handleDeleteWilder = async (wilderId: number) => {
-    // Ouvrir la modal de confirmation et conserver l'ID
+    // Open the confirmation modal and store the wilder ID
     setDeletingIndex(wilderId);
   };
 
+  // Function to confirm wilder deletion
   const handleConfirmDelete = async () => {
     if (deletingIndex !== null) {
       try {
+        // Call the API to delete the wilder
         const response: ApiResponse<void> = await fetchData(
           `${baseUrl}/users/${deletingIndex}`,
           {
@@ -91,12 +123,14 @@ const Admin = () => {
           },
         );
 
+        // Check if the deletion was successful
         if (response.status === 200) {
+          // Update the state to remove the deleted wilder
           setWilderList(prevList =>
             prevList.filter(wilder => wilder.userId !== deletingIndex),
           );
 
-          // Affichez une alerte de succès avec react-toastify
+          // Show a success alert using react-toastify
           toast.success("Wilder deleted successfully!", {
             className: styles.toastifySuccess,
             autoClose: 2000,
@@ -104,12 +138,12 @@ const Admin = () => {
         }
       } catch (err) {
         console.error("Error:", err);
-        if ((err as Error).message === "Token expired.") {
+        // Handle token expiration by logging out
+        if ((err as Error).message === "Token expired." || "Unauthorized") {
           handleLogout();
         }
-        // Gérez l'erreur ici, par exemple, en affichant un message d'erreur à l'utilisateur
       } finally {
-        // Fermez la modal de confirmation
+        // Close the confirmation modal
         setDeletingIndex(null);
       }
     }
@@ -128,11 +162,13 @@ const Admin = () => {
           </thead>
           <tbody className={styles.tableBodyContainer}>
             {wilderList
+              // Filter out the currently logged-in user
               .filter(wilder => wilder.userId !== auth.userId)
               .map(wilder => (
                 <tr key={wilder.userId}>
                   <td>{wilder.username}</td>
                   <td>
+                    {/* Dropdown for role selection */}
                     <select
                       value={wilder.role}
                       onChange={e => {
@@ -146,6 +182,7 @@ const Admin = () => {
                     </select>
                   </td>
                   <td>
+                    {/* Delete button */}
                     <RxCross2
                       type="button"
                       className={styles.deleteIcon}
@@ -162,6 +199,8 @@ const Admin = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Confirmation modal for wilder deletion */}
       <ConfirmationModal
         isOpen={deletingIndex !== null}
         onClose={() => setDeletingIndex(null)}

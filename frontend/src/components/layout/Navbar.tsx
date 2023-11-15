@@ -1,3 +1,8 @@
+// Navbar component provides a navigation bar with NavLink components for different sections.
+// It utilizes the react-router-dom library for seamless routing.
+// The navigation links include Main Wall, Archives Wall, and Admin Page (if the user has admin rights).
+// The component dynamically applies styles based on the active NavLink.
+// User authentication is used to conditionally render the Admin Page link.
 import {NavLink} from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import styles from "./Navbar.module.css";

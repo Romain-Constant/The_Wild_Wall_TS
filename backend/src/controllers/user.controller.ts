@@ -3,10 +3,12 @@ import User from 'types/user.type'
 import * as bcrypt from 'bcrypt'
 import * as userModel from '../models/user.model'
 
+// Function to handle unexpected errors and send a 500 Internal Server Error response
 const handleUnexpectedError = (res: Response) => {
   return res.status(500).json({ error: 'Internal server error.' })
 }
 
+// Controller function to get all users
 export const getAllUsers = async (req: Request, res: Response): Promise<Response> => {
   try {
     const users: User[] = await userModel.findAllUsers()
@@ -15,7 +17,7 @@ export const getAllUsers = async (req: Request, res: Response): Promise<Response
       return res.status(404).json({ error: 'No user found' })
     }
 
-    // Créez un nouveau tableau avec les propriétés spécifiques
+    // Create a new array with specific properties
     const simplifiedUsers = users.map((user) => ({
       userId: user.userId,
       username: user.username,
@@ -33,6 +35,7 @@ export const getAllUsers = async (req: Request, res: Response): Promise<Response
   }
 }
 
+// Controller function to register a new user
 export const registerUser = async (req: Request, res: Response): Promise<Response> => {
   const { username, password } = req.body
 
@@ -60,6 +63,7 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
   }
 }
 
+// Controller function to edit user role
 export const editUserRole = async (req: Request, res: Response): Promise<Response> => {
   const { name } = req.body.role
 
@@ -78,14 +82,14 @@ export const editUserRole = async (req: Request, res: Response): Promise<Respons
   const userId: number = parseInt(req.params.id, 10)
 
   try {
-    // Vérifiez d'abord si l'utilisateur existe
+    // First, check if the user exists
     const user: User | null = await userModel.findUserById(userId)
 
     if (!user) {
       return res.status(404).json({ error: 'User not found.' })
     }
 
-    // Continuez avec la modification du rôle
+    // Continue with role modification
     if (req.user?.roleCode !== '2013') {
       return res.status(403).json({ error: 'Forbidden' })
     }
@@ -103,6 +107,7 @@ export const editUserRole = async (req: Request, res: Response): Promise<Respons
   }
 }
 
+// Controller function to delete a user
 export const deleteUser = async (req: Request, res: Response): Promise<Response> => {
   const userId: number = parseInt(req.params.id, 10)
 
@@ -111,14 +116,14 @@ export const deleteUser = async (req: Request, res: Response): Promise<Response>
       return res.status(403).json({ error: 'Forbidden' })
     }
 
-    // Vérifiez d'abord si l'utilisateur existe
+    // First, check if the user exists
     const user: User | null = await userModel.findUserById(userId)
 
     if (!user) {
       return res.status(404).json({ error: 'No user found' })
     }
 
-    // Si l'utilisateur existe, procédez à sa suppression
+    // If the user exists, proceed with deletion
     const result = await userModel.deleteUser(userId)
 
     if (result.affectedRows > 0) {

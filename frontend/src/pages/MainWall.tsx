@@ -11,32 +11,31 @@ import {useMediaQuery} from "react-responsive";
 import styles from "./MainWall.module.css";
 
 function MainWall() {
+  // State to store the list of posts
   const [postsList, setPostsList] = useState<Post[]>([]);
+
+  // Accessing setAuth function from the useAuth hook
   const {setAuth} = useAuth();
+
+  // State to store random rotations for each post
   const [rotations, setRotations] = useState<number[]>([]);
+
+  // State to store the post ID for deletion confirmation modal
   const [deletePostId, setDeletePostId] = useState<number | null>(null);
+
+  // State to store the post ID for archive confirmation modal
   const [archivePostId, setArchivePostId] = useState<number | null>(null);
+
+  // Media query for checking if the screen size is desktop
   const isDesktop = useMediaQuery({query: "(min-width: 768px)"});
+
+  // Accessing the navigation function from React Router
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    // Delete the authentication cookie
-    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    try {
-      await fetchData(`${baseUrl}/auth/logout`, {
-        method: "GET",
-      });
-
-      navigate("/login");
-
-      setAuth({});
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
+  // Function to fetch all posts from the server
   const fetchAllPosts = async () => {
     try {
+      // Send a request to the server to get all posts
       const response: ApiResponse<{posts: Post[]}> = await fetchData(
         `${baseUrl}/posts`,
         {
@@ -44,18 +43,42 @@ function MainWall() {
         },
       );
 
+      // Update the local state with the retrieved posts
       setPostsList(response.data.posts);
     } catch (err) {
       console.error("Error:", err);
     }
   };
 
+  // Effect to fetch all posts when the component mounts
   useEffect(() => {
     fetchAllPosts();
   }, []);
 
+  // Function to handle user logout
+  const handleLogout = async () => {
+    // Delete the authentication cookie
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    try {
+      // Send a logout request to the server
+      await fetchData(`${baseUrl}/auth/logout`, {
+        method: "GET",
+      });
+
+      // Navigate to the login page
+      navigate("/login");
+
+      // Clear the authentication state
+      setAuth({});
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // Function to handle post deletion
   const handlePostDelete = async (postId: number) => {
     try {
+      // Send a request to the server to delete the post
       const response: ApiResponse<void> = await fetchData(
         `${baseUrl}/posts/${postId}`,
         {
@@ -63,6 +86,7 @@ function MainWall() {
         },
       );
 
+      // If deletion is successful on the server, update the local list of posts
       if (response.status === 200) {
         setPostsList(prevPosts =>
           prevPosts.filter(post => post.postId !== postId),
@@ -70,18 +94,20 @@ function MainWall() {
       }
     } catch (err) {
       console.error("Error:", err);
-      if ((err as Error).message === "Token expired.") {
+      // Check if the error is due to an expired token and handle logout
+      if ((err as Error).message === "Token expired." || "Unauthorized") {
         handleLogout();
       }
     } finally {
-      // Fermez la modal après la suppression
+      // Close the modal after deletion
       setDeletePostId(null);
     }
   };
 
+  // Function to handle post archiving
   const handlePostArchive = async (postId: number) => {
     try {
-      // Envoyez la demande au serveur pour archiver le post
+      // Send a request to the server to archive the post
       const response: ApiResponse<void> = await fetchData(
         `${baseUrl}/posts/archive/${postId}`,
         {
@@ -89,26 +115,27 @@ function MainWall() {
         },
       );
 
+      // If archiving is successful on the server, update the local list of posts
       if (response.status === 200) {
-        // Si l'archivage réussit sur le serveur, mettez à jour localement la liste des posts
         setPostsList(prevPosts =>
           prevPosts.filter(post => post.postId !== postId),
         );
       }
     } catch (err) {
       console.error("Error:", err);
-      if ((err as Error).message === "Token expired.") {
+      // Check if the error is due to an expired token and handle logout
+      if ((err as Error).message === "Token expired." || "Unauthorized") {
         handleLogout();
       }
-      // Gérez l'erreur ici, par exemple, en affichant un message d'erreur à l'utilisateur
+      // Handle the error here, for example, by displaying an error message to the user
     } finally {
-      // Fermez la modal après la suppression
+      // Close the modal after archiving
       setArchivePostId(null);
     }
   };
 
+  // Effect to generate random rotations for each post
   useEffect(() => {
-    // Générer les rotations aléatoires pour chaque post
     const generateRandomRotations = () => {
       const minRotation = -5;
       const maxRotation = 5;
@@ -123,16 +150,17 @@ function MainWall() {
     generateRandomRotations();
   }, [postsList]);
 
-  // Fonction pour ouvrir la modal de confirmation de suppression
+  // Function to open the delete confirmation modal
   const openDeleteModal = (postId: number) => {
     setDeletePostId(postId);
   };
 
-  // Fonction pour ouvrir la modal de confirmation pour l'archivage
+  // Function to open the archive confirmation modal
   const openArchiveModal = (postId: number) => {
     setArchivePostId(postId);
   };
 
+  // Render the main wall component
   return (
     <section className={styles.mainWallContainer}>
       <div className={styles.postContainer}>
@@ -140,8 +168,8 @@ function MainWall() {
           <StickyPost
             key={post.postId}
             postData={post}
-            onDelete={() => openDeleteModal(post.postId)} // Ouvrir la modal de confirmation
-            onArchive={() => openArchiveModal(post.postId)}
+            onDelete={() => openDeleteModal(post.postId)} // Open the delete confirmation modal
+            onArchive={() => openArchiveModal(post.postId)} // Open the archive confirmation modal
             rotation={rotations[idx]}
             isArchivedPost={false}
           />
@@ -157,24 +185,24 @@ function MainWall() {
         </div>
       )}
 
-      {/* Modal de confirmation de suppression */}
+      {/* Delete confirmation modal */}
       <ConfirmationModal
         isOpen={deletePostId !== null}
         onClose={() => setDeletePostId(null)}
         onConfirm={() => {
           if (deletePostId !== null) {
-            handlePostDelete(deletePostId); // Vérification de nullité avant d'appeler handlePostDelete
+            handlePostDelete(deletePostId); // Check for nullability before calling handlePostDelete
           }
         }}
         message="Are you sure you want to delete this post?"
       />
-      {/* Modal de confirmation pour l'archivage */}
+      {/* Archive confirmation modal */}
       <ConfirmationModal
         isOpen={archivePostId !== null}
         onClose={() => setArchivePostId(null)}
         onConfirm={() => {
           if (archivePostId !== null) {
-            handlePostArchive(archivePostId); // Vérification de nullité avant d'appeler handlePostArchive
+            handlePostArchive(archivePostId); // Check for nullability before calling handlePostArchive
           }
         }}
         message="Are you sure you want to archive this post?"
