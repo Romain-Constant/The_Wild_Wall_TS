@@ -1,7 +1,4 @@
-import dotenv from 'dotenv'
-
-// load environment variables
-dotenv.config()
+require('dotenv').config()
 
 // Import necessary modules
 const fs = require('fs')
