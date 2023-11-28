@@ -108,7 +108,10 @@ function ArchivedPosts() {
       {isDesktop && (
         <Link to="/writepost" className={styles.writepostLink}>
           <div className={styles.addPostIconContainer}>
-            <BsPlusCircleFill className={styles.addPostIcon} />
+            <BsPlusCircleFill
+              className={styles.addPostIcon}
+              aria-label="Add Post"
+            />
           </div>
         </Link>
       )}
