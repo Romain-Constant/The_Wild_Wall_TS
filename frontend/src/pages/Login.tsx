@@ -30,7 +30,7 @@ function Login() {
   }, []);
 
   // Function to handle the login form submission
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
