@@ -74,4 +74,4 @@ VALUES
 
 -- Insert the post "First post" with the blue color on the current date
 INSERT INTO `ts_wild_wall`.`post` (`post_text`, `post_date`, `statut_id`, `user_id`, `color_id`)
-VALUES ('First post', NOW(), 1, 1, 3);
+VALUES ('Inauguration du tableau avec une première note !', NOW(), 1, 1, 3);

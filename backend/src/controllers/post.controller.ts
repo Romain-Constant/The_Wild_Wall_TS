@@ -66,9 +66,6 @@ export const addPost = async (req: Request, res: Response): Promise<Response> =>
   }
 
   try {
-    // Access req.user directly without manually checking the token
-    console.log(req.user)
-
     // Use userId from req.user instead of manually decoding the token
     if (req.user?.userId !== userId) {
       return res.status(403).json({ error: 'Forbidden' })

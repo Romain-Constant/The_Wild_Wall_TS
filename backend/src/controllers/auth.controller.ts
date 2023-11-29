@@ -29,7 +29,7 @@ export const loginUser = async (req: Request, res: Response): Promise<Response> 
 
         // Sign the token with user information and set expiration time
         const token: string = jwt.sign({ userId, roleCode }, jwtPassword, {
-          expiresIn: 1800 // Expires in 1800 seconds (30 minutes)
+          expiresIn: 3600 // Expires in 3600 seconds (1 hour)
         })
 
         // Set the token as a cookie in the response

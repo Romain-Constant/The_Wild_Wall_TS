@@ -14,9 +14,6 @@ function MainWall() {
   // State to store the list of posts
   const [postsList, setPostsList] = useState<Post[]>([]);
 
-  // Accessing setAuth function from the useAuth hook
-  const {setAuth} = useAuth();
-
   // State to store random rotations for each post
   const [rotations, setRotations] = useState<number[]>([]);
 
@@ -25,6 +22,9 @@ function MainWall() {
 
   // State to store the post ID for archive confirmation modal
   const [archivePostId, setArchivePostId] = useState<number | null>(null);
+
+  // Accessing setAuth function from the useAuth hook
+  const {setAuth} = useAuth();
 
   // Media query for checking if the screen size is desktop
   const isDesktop = useMediaQuery({query: "(min-width: 768px)"});
