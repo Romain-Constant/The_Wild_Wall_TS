@@ -67,7 +67,7 @@ function Register() {
 
     try {
       // Send a registration request to the server
-      const response: ApiResponse<void> = await fetchData<void>(
+      const response: ApiResponse<void> = await fetchData(
         `${baseUrl}/users/register`,
         {
           method: "POST",
