@@ -38,28 +38,29 @@ function StickyPost({
       return (
         <div className={styles.stickyButtonsContainer}>
           {!isArchivedPost && (
-            <div
-              className={styles.iconCircleContainer}
-              style={{
-                backgroundColor:
-                  statutName === "archived" ? "grey" : postData.colorCode,
-              }}>
-              <Link
-                to={`/editpost/${postData.postId}`}
-                className={styles.editLink}>
-                <BsFillPencilFill className={styles.penIcon} />
-              </Link>
-            </div>
-          )}
-          {!isArchivedPost && (
-            <div
-              className={styles.iconCircleContainer}
-              style={{
-                backgroundColor:
-                  statutName === "archived" ? "grey" : postData.colorCode,
-              }}>
-              <FaArchive className={styles.penIcon} onClick={onArchive} />
-            </div>
+            <>
+              <div
+                className={styles.iconCircleContainer}
+                style={{
+                  backgroundColor:
+                    statutName === "archived" ? "grey" : postData.colorCode,
+                }}>
+                <Link
+                  to={`/editpost/${postData.postId}`}
+                  className={styles.editLink}>
+                  <BsFillPencilFill className={styles.penIcon} />
+                </Link>
+              </div>
+
+              <div
+                className={styles.iconCircleContainer}
+                style={{
+                  backgroundColor:
+                    statutName === "archived" ? "grey" : postData.colorCode,
+                }}>
+                <FaArchive className={styles.penIcon} onClick={onArchive} />
+              </div>
+            </>
           )}
           <div
             className={styles.iconCircleContainer}
